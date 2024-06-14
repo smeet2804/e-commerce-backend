@@ -1,6 +1,9 @@
 package com.example.ecommercebackend.service;
 
 
+import com.example.ecommercebackend.dto.UserRequestDTO;
+import com.example.ecommercebackend.dto.UserResponseDTO;
+import com.example.ecommercebackend.mapper.UserMapper;
 import com.example.ecommercebackend.models.User;
 import com.example.ecommercebackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,25 +11,57 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
-public class UserService {
+public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    @Override
+    public List<UserResponseDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return UserMapper.getUserResponseDTOListFromUsers(users);
     }
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    @Override
+    public UserResponseDTO getUserById(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        return UserMapper.getUserResponseDTOFromUser(user);
     }
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    @Override
+    public UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
+        User user = UserMapper.getUserFromRequestDTO(userRequestDTO);
+        user = userRepository.save(user);
+        return UserMapper.getUserResponseDTOFromUser(user);
     }
 
+    @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserResponseDTO patchUser(Long id, UserRequestDTO userRequestDTO) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (userRequestDTO.getUsername() != null) {
+            user.setUsername(userRequestDTO.getUsername());
+        }
+        if (userRequestDTO.getPassword() != null) {
+            user.setPassword(userRequestDTO.getPassword());
+        }
+        if (userRequestDTO.getEmail() != null) {
+            user.setEmail(userRequestDTO.getEmail());
+        }
+        if (userRequestDTO.getFirstName() != null) {
+            user.setFirstName(userRequestDTO.getFirstName());
+        }
+        if (userRequestDTO.getLastName() != null) {
+            user.setLastName(userRequestDTO.getLastName());
+        }
+        userRepository.save(user);
+        return UserMapper.getUserResponseDTOFromUser(user);
     }
 }
