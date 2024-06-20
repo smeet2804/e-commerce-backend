@@ -4,6 +4,9 @@ package com.example.ecommercebackend.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 public class UserRequestDTO {
@@ -14,4 +17,5 @@ public class UserRequestDTO {
     public String email;
     public String firstName;
     public String lastName;
+    public Set<String> roles;
 }

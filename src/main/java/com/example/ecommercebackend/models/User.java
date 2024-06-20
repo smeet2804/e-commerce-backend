@@ -2,6 +2,7 @@ package com.example.ecommercebackend.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.util.*;
 
 @Data
 @Entity
@@ -26,4 +27,7 @@ public class User {
 
     @Column(nullable = false)
     private String lastName;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles;
 }

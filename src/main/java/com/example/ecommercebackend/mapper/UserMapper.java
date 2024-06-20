@@ -5,6 +5,7 @@ import com.example.ecommercebackend.dto.UserResponseDTO;
 import com.example.ecommercebackend.models.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class UserMapper {
@@ -21,6 +22,7 @@ public class UserMapper {
         user.setEmail(dto.getEmail());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
+        user.setRoles(dto.getRoles());
         return user;
     }
 
@@ -35,6 +37,7 @@ public class UserMapper {
         responseDTO.setEmail(user.getEmail());
         responseDTO.setFirstName(user.getFirstName());
         responseDTO.setLastName(user.getLastName());
+        responseDTO.setRoles(user.getRoles());
         return responseDTO;
     }
 

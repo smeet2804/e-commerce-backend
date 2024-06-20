@@ -7,6 +7,7 @@ import com.example.ecommercebackend.mapper.UserMapper;
 import com.example.ecommercebackend.models.User;
 import com.example.ecommercebackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<UserResponseDTO> getAllUsers() {
@@ -32,8 +36,14 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
-        User user = UserMapper.getUserFromRequestDTO(userRequestDTO);
-        user = userRepository.save(user);
+        User user = new User();
+        user.setUsername(userRequestDTO.getUsername());
+        user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+        user.setEmail(userRequestDTO.getEmail());
+        user.setFirstName(userRequestDTO.getFirstName());
+        user.setLastName(userRequestDTO.getLastName());
+        user.setRoles(userRequestDTO.getRoles());
+        User savedUser = userRepository.save(user);
         return UserMapper.getUserResponseDTOFromUser(user);
     }
 
