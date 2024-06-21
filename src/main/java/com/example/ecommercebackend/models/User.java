@@ -2,7 +2,7 @@ package com.example.ecommercebackend.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.util.*;
+import java.util.Set;
 
 @Data
 @Entity
@@ -29,5 +29,7 @@ public class User {
     private String lastName;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
     private Set<String> roles;
 }

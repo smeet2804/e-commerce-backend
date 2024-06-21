@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -42,7 +43,7 @@ public class UserService implements IUserService {
         user.setEmail(userRequestDTO.getEmail());
         user.setFirstName(userRequestDTO.getFirstName());
         user.setLastName(userRequestDTO.getLastName());
-        user.setRoles(userRequestDTO.getRoles());
+        user.setRoles(Collections.singleton("USER"));
         User savedUser = userRepository.save(user);
         return UserMapper.getUserResponseDTOFromUser(user);
     }
@@ -74,4 +75,6 @@ public class UserService implements IUserService {
         userRepository.save(user);
         return UserMapper.getUserResponseDTOFromUser(user);
     }
+
+
 }
