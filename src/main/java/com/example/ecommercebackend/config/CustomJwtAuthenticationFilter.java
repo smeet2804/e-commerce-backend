@@ -6,15 +6,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
 
 @Component
 public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
@@ -29,38 +28,46 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         System.out.println("CustomJwtAuthenticationFilter: Request received");
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Extract access token from the Authorization header
+        String authorizationHeader = request.getHeader("Authorization");
 
-        if (authentication instanceof JwtAuthenticationToken) {
-            System.out.println("Authentication is a JwtAuthenticationToken");
-            Jwt jwt = (Jwt) authentication.getPrincipal();
-            String email = jwt.getClaimAsString("email");
-            System.out.println("JWT email claim: " + email);
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String accessToken = authorizationHeader.substring(7);
+            System.out.println("Access token: " + accessToken);
 
-            if (email != null) {
-                User existingUser = userRepository.findByEmail(email);
-                if (existingUser == null) {
-                    System.out.println("User not found in database. Creating new user.");
+            // Fetch user info from Google using access token
+            RestTemplate restTemplate = new RestTemplate();
+            String userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo";
+            Map<String, Object> userInfo = restTemplate.getForObject(userInfoEndpoint + "?access_token=" + accessToken, Map.class);
+            System.out.println("User info: " + userInfo);
 
-                    String firstName = jwt.getClaimAsString("given_name");
-                    String lastName = jwt.getClaimAsString("family_name");
-                    String username = jwt.getClaimAsString("email");
+            if (userInfo != null) {
+                String email = (String) userInfo.get("email");
+                System.out.println("User email: " + email);
 
-                    User newUser = new User();
-                    newUser.setEmail(email);
-                    newUser.setFirstName(firstName);
-                    newUser.setLastName(lastName);
-                    newUser.setUsername(username);
-                    newUser.setPassword("123456"); // Set a default password or generate a random one
-                    newUser.setRoles(Collections.singleton("USER"));
-                    userRepository.save(newUser);
-                    System.out.println("New user saved to database.");
-                } else {
-                    System.out.println("User already exists in database.");
+                if (email != null) {
+                    User existingUser = userRepository.findByEmail(email);
+                    if (existingUser == null) {
+                        System.out.println("User not found in database. Creating new user.");
+
+                        String firstName = (String) userInfo.get("given_name");
+                        String lastName = (String) userInfo.get("family_name");
+                        String username = email;
+
+                        User newUser = new User();
+                        newUser.setEmail(email);
+                        newUser.setFirstName(firstName);
+                        newUser.setLastName(lastName);
+                        newUser.setUsername(username);
+                        newUser.setPassword("123456"); // Set a default password or generate a random one
+                        newUser.setRoles(Collections.singleton("USER"));
+                        userRepository.save(newUser);
+                        System.out.println("New user saved to database.");
+                    } else {
+                        System.out.println("User already exists in database.");
+                    }
                 }
             }
-        } else {
-            System.out.println("Authentication is not a JwtAuthenticationToken");
         }
 
         filterChain.doFilter(request, response);
