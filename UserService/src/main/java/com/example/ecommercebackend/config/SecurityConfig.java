@@ -28,7 +28,8 @@ public class SecurityConfig {
         CustomOpaqueTokenAuthenticationFilter customJwtAuthenticationFilter = new CustomOpaqueTokenAuthenticationFilter(userRepository);
 
         http
-                .authorizeRequests(authorizeRequests -> authorizeRequests
+                .authorizeHttpRequests(authorize ->
+                        authorize
                         .requestMatchers("/users").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

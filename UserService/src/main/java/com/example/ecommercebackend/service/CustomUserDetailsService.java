@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.services;
+package com.example.ecommercebackend.service;
 
 import com.example.ecommercebackend.models.User;
 import com.example.ecommercebackend.repository.UserRepository;
