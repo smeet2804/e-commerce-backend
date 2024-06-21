@@ -1,0 +1,13 @@
+------ issue 1 -------
+
+test cases passing even without access token
+whereas in postman it gives 403 error
+
+temp fix
+explicit setting response but why it works?
+if (authorizationHeader == null){
+    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    response.getWriter().println("Unauthorized");
+}
+
+-----------------------

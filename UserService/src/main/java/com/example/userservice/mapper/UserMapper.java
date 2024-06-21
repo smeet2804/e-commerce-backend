@@ -1,11 +1,10 @@
-package com.example.ecommercebackend.mapper;
+package com.example.userservice.mapper;
 
-import com.example.ecommercebackend.dto.UserRequestDTO;
-import com.example.ecommercebackend.dto.UserResponseDTO;
-import com.example.ecommercebackend.models.User;
+import com.example.userservice.dto.UserRequestDTO;
+import com.example.userservice.dto.UserResponseDTO;
+import com.example.userservice.models.User;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class UserMapper {

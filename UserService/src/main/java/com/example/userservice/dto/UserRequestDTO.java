@@ -1,10 +1,9 @@
-package com.example.ecommercebackend.dto;
+package com.example.userservice.dto;
 
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Data

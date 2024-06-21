@@ -1,8 +1,9 @@
-package com.example.ecommercebackend.config;
+package com.example.userservice.config;
 
-import com.example.ecommercebackend.filters.CustomOpaqueTokenAuthenticationFilter;
-import com.example.ecommercebackend.repository.UserRepository;
-import com.example.ecommercebackend.service.UserService;
+import com.example.userservice.filters.CustomOpaqueTokenAuthenticationFilter;
+import com.example.userservice.repository.UserRepository;
+import com.example.userservice.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -30,11 +31,11 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize ->
                         authorize
-                        .requestMatchers("/users").hasRole("ADMIN")
+                        .requestMatchers("/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(customJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(customJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 
@@ -42,4 +43,5 @@ public class SecurityConfig {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

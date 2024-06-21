@@ -1,7 +1,7 @@
-package com.example.ecommercebackend.service;
+package com.example.userservice.service;
 
-import com.example.ecommercebackend.dto.UserRequestDTO;
-import com.example.ecommercebackend.dto.UserResponseDTO;
+import com.example.userservice.dto.UserRequestDTO;
+import com.example.userservice.dto.UserResponseDTO;
 
 import java.util.List;
 

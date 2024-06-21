@@ -1,7 +1,7 @@
-package com.example.ecommercebackend.service;
+package com.example.userservice.service;
 
-import com.example.ecommercebackend.models.User;
-import com.example.ecommercebackend.repository.UserRepository;
+import com.example.userservice.models.User;
+import com.example.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

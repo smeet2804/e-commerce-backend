@@ -1,7 +1,7 @@
-package com.example.ecommercebackend.filters;
+package com.example.userservice.filters;
 
-import com.example.ecommercebackend.models.User;
-import com.example.ecommercebackend.repository.UserRepository;
+import com.example.userservice.models.User;
+import com.example.userservice.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +33,11 @@ public class CustomOpaqueTokenAuthenticationFilter extends OncePerRequestFilter 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
-
+        System.out.println("---------------------------------------"+authorizationHeader);
+        if (authorizationHeader == null){
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println("Unauthorized");
+        }
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String accessToken = authorizationHeader.substring(7);
 
@@ -55,6 +59,7 @@ public class CustomOpaqueTokenAuthenticationFilter extends OncePerRequestFilter 
             }
         }
 
+        System.out.println("Response status: "+response.getStatus());
         filterChain.doFilter(request, response);
     }
 

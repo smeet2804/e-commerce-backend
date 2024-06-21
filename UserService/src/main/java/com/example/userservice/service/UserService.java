@@ -1,11 +1,11 @@
-package com.example.ecommercebackend.service;
+package com.example.userservice.service;
 
 
-import com.example.ecommercebackend.dto.UserRequestDTO;
-import com.example.ecommercebackend.dto.UserResponseDTO;
-import com.example.ecommercebackend.mapper.UserMapper;
-import com.example.ecommercebackend.models.User;
-import com.example.ecommercebackend.repository.UserRepository;
+import com.example.userservice.dto.UserRequestDTO;
+import com.example.userservice.dto.UserResponseDTO;
+import com.example.userservice.mapper.UserMapper;
+import com.example.userservice.models.User;
+import com.example.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -77,4 +77,11 @@ public class UserService implements IUserService {
     }
 
 
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
 }
