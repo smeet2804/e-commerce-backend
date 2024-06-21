@@ -1,5 +1,6 @@
 package com.example.ecommercebackend.config;
 
+import com.example.ecommercebackend.filters.CustomOpaqueTokenAuthenticationFilter;
 import com.example.ecommercebackend.repository.UserRepository;
 import com.example.ecommercebackend.service.UserService;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +25,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, UserService userService) throws Exception {
-        CustomJwtAuthenticationFilter customJwtAuthenticationFilter = new CustomJwtAuthenticationFilter(userRepository);
+        CustomOpaqueTokenAuthenticationFilter customJwtAuthenticationFilter = new CustomOpaqueTokenAuthenticationFilter(userRepository);
 
         http
                 .authorizeRequests(authorizeRequests -> authorizeRequests
