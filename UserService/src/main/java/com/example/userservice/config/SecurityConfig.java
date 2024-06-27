@@ -1,6 +1,7 @@
 package com.example.userservice.config;
 
 import com.example.userservice.filters.CustomOpaqueTokenAuthenticationFilter;
+import com.example.userservice.producers.KafkaEmailProducer;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final UserRepository userRepository;
-
-    public SecurityConfig(UserRepository userRepository) {
+    private final KafkaEmailProducer kafkaEmailProducer;
+    public SecurityConfig(UserRepository userRepository, KafkaEmailProducer kafkaEmailProducer) {
         this.userRepository = userRepository;
+        this.kafkaEmailProducer = kafkaEmailProducer;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, UserService userService) throws Exception {
-        CustomOpaqueTokenAuthenticationFilter customJwtAuthenticationFilter = new CustomOpaqueTokenAuthenticationFilter(userRepository);
+        CustomOpaqueTokenAuthenticationFilter customJwtAuthenticationFilter = new CustomOpaqueTokenAuthenticationFilter(userRepository, kafkaEmailProducer);
 
         http
                 .authorizeHttpRequests(authorize ->

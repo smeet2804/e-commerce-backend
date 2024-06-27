@@ -1,0 +1,7 @@
+------- issue 1 ------
+implement exception try catch block if email sending fails
+----------------------
+
+------ issue 2 -------
+figure what is the proper way to inject kafkaproducer in user service
+----------------------

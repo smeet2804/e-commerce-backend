@@ -1,11 +1,14 @@
 package com.example.userservice.filters;
 
+import com.example.userservice.dto.EmailDTO;
 import com.example.userservice.models.User;
+import com.example.userservice.producers.KafkaEmailProducer;
 import com.example.userservice.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,9 +28,11 @@ import java.util.stream.Collectors;
 public class CustomOpaqueTokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
+    private KafkaEmailProducer kafkaEmailProducer;
 
-    public CustomOpaqueTokenAuthenticationFilter(UserRepository userRepository) {
+    public CustomOpaqueTokenAuthenticationFilter(UserRepository userRepository, KafkaEmailProducer kafkaEmailProducer) {
         this.userRepository = userRepository;
+        this.kafkaEmailProducer = kafkaEmailProducer;
     }
 
     @Override
@@ -91,6 +96,13 @@ public class CustomOpaqueTokenAuthenticationFilter extends OncePerRequestFilter 
         user.setPassword("123456"); // Ideally, set a more secure default password or use OAuth2 only
         user.setRoles(Collections.singleton(email.equals("shahsmeet2804@gmail.com") ? "ADMIN" : "USER"));
         userRepository.save(user);
+
+        EmailDTO emailDTO = new EmailDTO();
+        emailDTO.setTo("shahsmeet2804@gmail.com");
+        emailDTO.setSubject("User Registration");
+        emailDTO.setText("Welcome " + firstName + " " + lastName);
+        kafkaEmailProducer.sendEmail(emailDTO);
+        System.out.println("User created with email ID: "+email);
         return user;
     }
 
