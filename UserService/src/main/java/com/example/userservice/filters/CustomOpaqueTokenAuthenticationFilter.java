@@ -27,13 +27,10 @@ import java.util.stream.Collectors;
 @Component
 public class CustomOpaqueTokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private KafkaEmailProducer kafkaEmailProducer;
-
-    public CustomOpaqueTokenAuthenticationFilter(UserRepository userRepository, KafkaEmailProducer kafkaEmailProducer) {
-        this.userRepository = userRepository;
-        this.kafkaEmailProducer = kafkaEmailProducer;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

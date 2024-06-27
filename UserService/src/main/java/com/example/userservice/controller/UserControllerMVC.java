@@ -2,6 +2,7 @@ package com.example.userservice.controller;
 
 import com.example.userservice.dto.UserRequestDTO;
 import com.example.userservice.dto.UserResponseDTO;
+import com.example.userservice.producers.KafkaEmailProducer;
 import com.example.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class UserControllerMVC {
 
     @Autowired
     private UserService userService;
+
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")

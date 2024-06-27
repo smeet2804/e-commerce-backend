@@ -19,16 +19,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final UserRepository userRepository;
-    private final KafkaEmailProducer kafkaEmailProducer;
-    public SecurityConfig(UserRepository userRepository, KafkaEmailProducer kafkaEmailProducer) {
-        this.userRepository = userRepository;
-        this.kafkaEmailProducer = kafkaEmailProducer;
-    }
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private KafkaEmailProducer kafkaEmailProducer;
+    @Autowired
+    CustomOpaqueTokenAuthenticationFilter customJwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, UserService userService) throws Exception {
-        CustomOpaqueTokenAuthenticationFilter customJwtAuthenticationFilter = new CustomOpaqueTokenAuthenticationFilter(userRepository, kafkaEmailProducer);
+
 
         http
                 .authorizeHttpRequests(authorize ->
