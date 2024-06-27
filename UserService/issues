@@ -1,3 +1,11 @@
+----- to experiment -----
+1. disable spring security class in test cases
+2. industrial way of creating profile and authorization via oauht2
+
+-------------------------
+
+
+
 ------ issue 1 -------
 
 test cases passing even without access token
