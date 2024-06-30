@@ -1,0 +1,11 @@
+https://medium.com/simform-engineering/spring-boot-caching-with-redis-1a36f719309f
+https://javatechonline.com/how-to-implement-redis-cache-in-spring-boot-application/
+https://stackoverflow.com/questions/43879279/spring-boot-redis-configuration-not-working
+https://medium.com/@eminyildiz122/data-synchronization-between-postgre-and-elasticsearch-using-logstash-and-performing-read-and-write-09c0fc068abb
+
+https://stackoverflow.com/questions/71492404/elasticsearch-showing-received-plaintext-http-traffic-on-an-https-channel-in-con
+elasticsearch -E xpack.security.enabled=false
+
+https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-windows/
+
+https://stackoverflow.com/questions/45431574/not-auto-generating-id-for-long-type-but-for-string-type-field-in-spring-data-el
