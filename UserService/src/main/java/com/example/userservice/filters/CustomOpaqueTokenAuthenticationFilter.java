@@ -1,6 +1,7 @@
 package com.example.userservice.filters;
 
 import com.example.userservice.dto.EmailDTO;
+import com.example.userservice.models.CustomUserDetails;
 import com.example.userservice.models.User;
 import com.example.userservice.producers.KafkaEmailProducer;
 import com.example.userservice.repository.UserRepository;
@@ -52,7 +53,7 @@ public class CustomOpaqueTokenAuthenticationFilter extends OncePerRequestFilter 
                     String email = (String) userInfo.get("email");
 
                     if (email != null) {
-                        handleUserAuthentication(email, userInfo, request);
+                        handleUserAuthentication(email, accessToken, userInfo, request);
                     }
                 }
             } catch (HttpClientErrorException e) {
@@ -65,16 +66,17 @@ public class CustomOpaqueTokenAuthenticationFilter extends OncePerRequestFilter 
         filterChain.doFilter(request, response);
     }
 
-    private void handleUserAuthentication(String email, Map<String, Object> userInfo, HttpServletRequest request) {
+    private void handleUserAuthentication(String email, String token, Map<String, Object> userInfo, HttpServletRequest request) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             user = createUser(userInfo, email);
         }
 
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+        CustomUserDetails userDetails = new CustomUserDetails(
                 user.getUsername(),
                 user.getPassword(),
-                user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList())
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList()),
+                token
         );
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

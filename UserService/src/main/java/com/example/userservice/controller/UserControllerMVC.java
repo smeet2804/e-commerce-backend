@@ -2,15 +2,19 @@ package com.example.userservice.controller;
 
 import com.example.userservice.dto.UserRequestDTO;
 import com.example.userservice.dto.UserResponseDTO;
+import com.example.userservice.models.CustomUserDetails;
 import com.example.userservice.producers.KafkaEmailProducer;
 import com.example.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +36,16 @@ public class UserControllerMVC {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id, @AuthenticationPrincipal UserDetails authenticatedUser) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id, @AuthenticationPrincipal UserDetails authenticatedUser, @RequestHeader("Authorization") String bearerToken) {
         UserResponseDTO user = userService.getUserById(id);
+//        System.out.println("Token: " + bearerToken);
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        System.out.println("Authentication: " + authentication);
+//        System.out.println("Authentication: " + authentication.getPrincipal());
+//        System.out.println("Authentication: " + authentication.getDetails());
+//        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String token = userDetails.getToken();
+//        System.out.println("Token in controller: " + bearerToken);
         if (user != null) {
             if (!(user.getRoles().contains("ADMIN") || (user.getEmail().equals(authenticatedUser.getUsername())))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);

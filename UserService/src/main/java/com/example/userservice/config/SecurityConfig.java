@@ -24,7 +24,7 @@ public class SecurityConfig {
     @Autowired
     private KafkaEmailProducer kafkaEmailProducer;
     @Autowired
-    CustomOpaqueTokenAuthenticationFilter customJwtAuthenticationFilter;
+    CustomOpaqueTokenAuthenticationFilter customOpaqueTokenAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, UserService userService) throws Exception {
@@ -36,7 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(customJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(customOpaqueTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable());
         return http.build();
     }
