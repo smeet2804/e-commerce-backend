@@ -1,5 +1,6 @@
 package com.example.productcatalogservice.controller;
 
+import com.example.productcatalogservice.dtos.ProductPriceDTO;
 import com.example.productcatalogservice.dtos.ProductRequestDTO;
 import com.example.productcatalogservice.dtos.ProductResponseDTO;
 import com.example.productcatalogservice.services.ProductService;
@@ -57,5 +58,11 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/price/{productId}")
+    public ResponseEntity<ProductPriceDTO> getProductPrice(@PathVariable String productId) {
+        ProductPriceDTO productPriceDTO = productService.getProductPriceById(productId);
+        return ResponseEntity.ok(productPriceDTO);
     }
 }

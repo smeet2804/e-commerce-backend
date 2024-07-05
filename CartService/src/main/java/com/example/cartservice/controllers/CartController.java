@@ -15,7 +15,7 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/add")
-    public ResponseEntity<Cart> addToCart(@RequestParam Long userId, @RequestParam Long productId, @RequestParam int quantity) {
+    public ResponseEntity<Cart> addToCart(@RequestParam Long userId, @RequestParam String productId, @RequestParam int quantity) {
         Cart updatedCart = cartService.addToCart(userId, productId, quantity);
         return ResponseEntity.ok(updatedCart);
     }
@@ -33,7 +33,7 @@ public class CartController {
     }
 
     @DeleteMapping("/remove")
-    public ResponseEntity<Cart> removeFromCart(@RequestParam Long userId, @RequestParam Long productId) {
+    public ResponseEntity<Cart> removeFromCart(@RequestParam Long userId, @RequestParam String productId) {
         Cart updatedCart = cartService.removeFromCart(userId, productId);
         return ResponseEntity.ok(updatedCart);
     }

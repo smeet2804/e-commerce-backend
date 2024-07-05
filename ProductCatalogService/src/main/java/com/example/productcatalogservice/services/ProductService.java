@@ -1,5 +1,6 @@
 package com.example.productcatalogservice.services;
 
+import com.example.productcatalogservice.dtos.ProductPriceDTO;
 import com.example.productcatalogservice.dtos.ProductRequestDTO;
 import com.example.productcatalogservice.dtos.ProductResponseDTO;
 import com.example.productcatalogservice.mapper.ProductMapper;
@@ -60,5 +61,17 @@ public class ProductService implements ProductServiceI {
     public void deleteProduct(String id) {
         productJpaRepository.deleteById(id);
         productElasticsearchRepository.deleteById(id);
+    }
+
+    @CachePut(value = "product", key = "#product.price")
+    public ProductPriceDTO getProductPriceById(String productId) {
+        Product product = productJpaRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        ProductPriceDTO productPriceDTO = new ProductPriceDTO();
+        productPriceDTO.setProductId(product.getId());
+        productPriceDTO.setPrice(product.getPrice());
+
+        return productPriceDTO;
     }
 }

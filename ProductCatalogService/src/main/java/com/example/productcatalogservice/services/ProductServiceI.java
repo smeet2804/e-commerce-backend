@@ -1,5 +1,6 @@
 package com.example.productcatalogservice.services;
 
+import com.example.productcatalogservice.dtos.ProductPriceDTO;
 import com.example.productcatalogservice.dtos.ProductRequestDTO;
 import com.example.productcatalogservice.dtos.ProductResponseDTO;
 
@@ -16,4 +17,6 @@ public interface ProductServiceI {
     ProductResponseDTO saveProduct(ProductRequestDTO productRequestDTO);
 
     void deleteProduct(String id);
+
+    ProductPriceDTO getProductPriceById(String productId);
 }

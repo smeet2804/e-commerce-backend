@@ -3,6 +3,7 @@ package com.example.cartservice.services;
 import com.example.cartservice.clients.OrderClient;
 import com.example.cartservice.clients.ProductClient;
 import com.example.cartservice.clients.UserClient;
+import com.example.cartservice.dtos.ProductPriceDTO;
 import com.example.cartservice.models.Cart;
 import com.example.cartservice.models.CartItem;
 import com.example.cartservice.models.Product;
@@ -27,11 +28,16 @@ public class CartService {
     @Autowired
     private OrderClient orderClient;
 
-    public Cart addToCart(Long userId, Long productId, int quantity) {
+    public Cart addToCart(Long userId, String productId, int quantity) {
         Cart cart = cartRepository.findByUserId(userId).orElse(new Cart(userId));
         double totalPrice = cart.getTotalPrice();
-        CartItem cartItem = new CartItem(productId, quantity, quantity * productClient.getProductPrice(productId));
-        totalPrice += quantity * productClient.getProductPrice(productId);
+        CartItem cartItem = new CartItem();
+        cartItem.setProductId(productId);
+        cartItem.setQuantity(quantity);
+        ProductPriceDTO productPriceDTO = productClient.getProductPrice(productId);
+        double productPrice = productPriceDTO.getPrice();
+        cartItem.setPrice(quantity * productPrice);
+        totalPrice += quantity * productPrice;
         cart.addItem(cartItem);
         cart.setTotalPrice(totalPrice);
         return cartRepository.save(cart);
@@ -58,14 +64,29 @@ public class CartService {
         return "Order successfully created with orderId: " + orderResponse;
     }
 
-    public Cart removeFromCart(Long userId, Long productId) {
-        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found"));
-        if (cart.getItems().stream().anyMatch(item -> item.getProductId().equals(productId))) {
+    public Cart removeFromCart(Long userId, String productId) {
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+
+        Optional<CartItem> cartItemOptional = cart.getItems().stream()
+                .filter(item -> item.getProductId().equals(productId))
+                .findFirst();
+
+        if (cartItemOptional.isPresent()) {
+            CartItem cartItem = cartItemOptional.get();
+            int quantity = cartItem.getQuantity();
+
+            ProductPriceDTO productPriceDTO = productClient.getProductPrice(productId);
+            double productPrice = productPriceDTO.getPrice();
+
             cart.removeItem(productId);
-            cart.setTotalPrice(cart.getTotalPrice() - productClient.getProductPrice(productId));
+            double totalPrice = cart.getTotalPrice() - (quantity * productPrice);
+            cart.setTotalPrice(totalPrice);
         }
+
         return cartRepository.save(cart);
     }
+
 
     public void deleteCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found"));

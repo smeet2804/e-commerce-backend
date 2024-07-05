@@ -1,18 +1,16 @@
 package com.example.cartservice.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
 
-@Data
-@Entity
-@Table(name = "products")
-public class Product implements Serializable {
-    @Id
+
+@Getter
+@Setter
+public class Product {
+
     private String id;
     private String name;
     private String description;

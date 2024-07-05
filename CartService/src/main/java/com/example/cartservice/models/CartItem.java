@@ -14,21 +14,12 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long productId;
+    private String productId;
     private int quantity;
     private double price;
     @Transient
     private String productName;
     @Transient
     private String productDescription;
-
-
-    public CartItem() {}
-
-    public CartItem(Long productId, int quantity, double price) {
-        this.productId = productId;
-        this.quantity = quantity;
-        this.price = price;
-    }
 
 }
