@@ -1,0 +1,34 @@
+package com.example.cartservice.models;
+
+import jakarta.persistence.Entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+public class CartItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Long productId;
+    private int quantity;
+    private double price;
+    @Transient
+    private String productName;
+    @Transient
+    private String productDescription;
+
+
+    public CartItem() {}
+
+    public CartItem(Long productId, int quantity, double price) {
+        this.productId = productId;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+}

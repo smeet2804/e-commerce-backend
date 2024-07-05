@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
-@EnableCaching
+//@EnableCaching
 @EnableElasticsearchRepositories("com.example.productcatalogservice.repository.elastic_search")
 @EnableJpaRepositories("com.example.productcatalogservice.repository.jpa")
 @SpringBootApplication
