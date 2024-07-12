@@ -3,7 +3,8 @@ package com.example.cartservice.services;
 import com.example.cartservice.clients.OrderClient;
 import com.example.cartservice.clients.ProductClient;
 import com.example.cartservice.clients.UserClient;
-import com.example.cartservice.dtos.ProductPriceDTO;
+import com.example.cartservice.dtos.*;
+import com.example.cartservice.mappers.CartMapper;
 import com.example.cartservice.models.Cart;
 import com.example.cartservice.models.CartItem;
 import com.example.cartservice.models.Product;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class CartService {
+public class CartService implements CartServiceI{
 
     @Autowired
     private CartRepository cartRepository;
@@ -28,22 +29,23 @@ public class CartService {
     @Autowired
     private OrderClient orderClient;
 
-    public Cart addToCart(Long userId, String productId, int quantity) {
-        Cart cart = cartRepository.findByUserId(userId).orElse(new Cart(userId));
+    public CartResponseDTO addToCart(AddToCartRequestDTO request) {
+        Cart cart = cartRepository.findByUserId(request.getUserId()).orElse(new Cart(request.getUserId()));
         double totalPrice = cart.getTotalPrice();
         CartItem cartItem = new CartItem();
-        cartItem.setProductId(productId);
-        cartItem.setQuantity(quantity);
-        ProductPriceDTO productPriceDTO = productClient.getProductPrice(productId);
+        cartItem.setProductId(request.getProductId());
+        cartItem.setQuantity(request.getQuantity());
+        ProductPriceDTO productPriceDTO = productClient.getProductPrice(request.getProductId());
         double productPrice = productPriceDTO.getPrice();
-        cartItem.setPrice(quantity * productPrice);
-        totalPrice += quantity * productPrice;
+        cartItem.setPrice(request.getQuantity() * productPrice);
+        totalPrice += request.getQuantity() * productPrice;
         cart.addItem(cartItem);
         cart.setTotalPrice(totalPrice);
-        return cartRepository.save(cart);
+        cartRepository.save(cart);
+        return CartMapper.toCartResponse(cart);
     }
 
-    public Cart reviewCart(Long userId) {
+    public CartResponseDTO reviewCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId).orElse(new Cart(userId));
         cart.getItems().forEach(item -> {
             Product product = productClient.getProductDetails(item.getProductId());
@@ -51,42 +53,41 @@ public class CartService {
             item.setProductDescription(product.getDescription());
             item.setPrice(item.getQuantity() * product.getPrice());
         });
-        return cart;
+        return CartMapper.toCartResponse(cart);
     }
 
-    public String checkout(Long userId, String address, String paymentMethod) {
-        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found"));
-        // Implement the checkout logic, interact with payment service etc.
-        cart.setAddress(address);
-        cart.setPaymentMethod(paymentMethod);
+    public String checkout(CheckoutRequestDTO request) {
+        Cart cart = cartRepository.findByUserId(request.getUserId()).orElseThrow(() -> new RuntimeException("Cart not found"));
+        cart.setAddress(request.getAddress());
+        cart.setPaymentMethod(request.getPaymentMethod());
         String orderResponse = orderClient.createOrder(cart);
         cartRepository.delete(cart);
         return "Order successfully created with orderId: " + orderResponse;
     }
 
-    public Cart removeFromCart(Long userId, String productId) {
-        Cart cart = cartRepository.findByUserId(userId)
+    public CartResponseDTO removeFromCart(RemoveFromCartRequestDTO request) {
+        Cart cart = cartRepository.findByUserId(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
         Optional<CartItem> cartItemOptional = cart.getItems().stream()
-                .filter(item -> item.getProductId().equals(productId))
+                .filter(item -> item.getProductId().equals(request.getProductId()))
                 .findFirst();
 
         if (cartItemOptional.isPresent()) {
             CartItem cartItem = cartItemOptional.get();
             int quantity = cartItem.getQuantity();
 
-            ProductPriceDTO productPriceDTO = productClient.getProductPrice(productId);
+            ProductPriceDTO productPriceDTO = productClient.getProductPrice(request.getProductId());
             double productPrice = productPriceDTO.getPrice();
 
-            cart.removeItem(productId);
+            cart.removeItem(request.getProductId());
             double totalPrice = cart.getTotalPrice() - (quantity * productPrice);
             cart.setTotalPrice(totalPrice);
         }
 
-        return cartRepository.save(cart);
+        cartRepository.save(cart);
+        return CartMapper.toCartResponse(cart);
     }
-
 
     public void deleteCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found"));

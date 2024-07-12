@@ -1,8 +1,7 @@
 package com.example.cartservice.controllers;
 
-
-import com.example.cartservice.models.Cart;
-import com.example.cartservice.services.CartService;
+import com.example.cartservice.dtos.*;
+import com.example.cartservice.services.CartServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,30 +11,30 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     @Autowired
-    private CartService cartService;
+    private CartServiceI cartService;
 
     @PostMapping("/add")
-    public ResponseEntity<Cart> addToCart(@RequestParam Long userId, @RequestParam String productId, @RequestParam int quantity) {
-        Cart updatedCart = cartService.addToCart(userId, productId, quantity);
-        return ResponseEntity.ok(updatedCart);
+    public ResponseEntity<CartResponseDTO> addToCart(@RequestBody AddToCartRequestDTO request) {
+        CartResponseDTO response = cartService.addToCart(request);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/review/{userId}")
-    public ResponseEntity<Cart> reviewCart(@PathVariable Long userId) {
-        Cart cart = cartService.reviewCart(userId);
-        return ResponseEntity.ok(cart);
+    public ResponseEntity<CartResponseDTO> reviewCart(@PathVariable Long userId) {
+        CartResponseDTO response = cartService.reviewCart(userId);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/checkout/{userId}")
-    public ResponseEntity<String> checkout(@PathVariable Long userId, @RequestParam String address, @RequestParam String paymentMethod) {
-        String result = cartService.checkout(userId, address, paymentMethod);
+    @PostMapping("/checkout")
+    public ResponseEntity<String> checkout(@RequestBody CheckoutRequestDTO request) {
+        String result = cartService.checkout(request);
         return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/remove")
-    public ResponseEntity<Cart> removeFromCart(@RequestParam Long userId, @RequestParam String productId) {
-        Cart updatedCart = cartService.removeFromCart(userId, productId);
-        return ResponseEntity.ok(updatedCart);
+    public ResponseEntity<CartResponseDTO> removeFromCart(@RequestBody RemoveFromCartRequestDTO request) {
+        CartResponseDTO response = cartService.removeFromCart(request);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/delete/{userId}")

@@ -16,4 +16,5 @@ public class ProductResponseDTO implements Serializable {
     private List<String> categories;
     private List<String> images;
     private String specifications;
+    private double price;
 }

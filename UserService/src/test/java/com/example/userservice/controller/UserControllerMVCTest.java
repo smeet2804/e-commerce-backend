@@ -2,26 +2,23 @@ package com.example.userservice.controller;
 
 import com.example.userservice.dto.UserRequestDTO;
 import com.example.userservice.dto.UserResponseDTO;
-import com.example.userservice.repository.UserRepository;
 import com.example.userservice.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -70,6 +67,9 @@ public class UserControllerMVCTest {
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(userList)));
+
+        // Verify that the getAllUsers method was called once
+        verify(userService).getAllUsers();
     }
 
     @Test
@@ -90,6 +90,9 @@ public class UserControllerMVCTest {
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(user)));
+
+        // Verify that the getUserById method was called with the correct ID
+        verify(userService).getUserById(1L);
     }
 
     @Test
@@ -120,6 +123,9 @@ public class UserControllerMVCTest {
                         .content(objectMapper.writeValueAsString(userToCreate)))
                 .andExpect(status().isCreated())
                 .andExpect(content().string(objectMapper.writeValueAsString(expectedUser)));
+
+        // Verify that the saveUser method was called with the correct user data
+        verify(userService).saveUser(any(UserRequestDTO.class));
     }
 
     @Test
@@ -160,6 +166,12 @@ public class UserControllerMVCTest {
                         .content(objectMapper.writeValueAsString(userToUpdate)))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(updatedUser)));
+
+        // Verify that the getUserById method was called with the correct ID
+        verify(userService).getUserById(1L);
+
+        // Verify that the saveUser method was called with the correct user data
+        verify(userService).saveUser(any(UserRequestDTO.class));
     }
 
     @Test
@@ -179,6 +191,12 @@ public class UserControllerMVCTest {
         // Act and Assert
         mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isOk());
+
+        // Verify that the getUserById method was called with the correct ID
+        verify(userService).getUserById(1L);
+
+        // Verify that the deleteUser method was called with the correct ID
+        verify(userService).deleteUser(1L);
     }
 
     @Test
@@ -216,5 +234,8 @@ public class UserControllerMVCTest {
                         .content(objectMapper.writeValueAsString(userPatch)))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(patchedUser)));
+
+        // Verify that the patchUser method was called with the correct ID and user data
+        verify(userService).patchUser(1L, userPatch);
     }
 }
