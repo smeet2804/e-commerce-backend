@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,7 +19,6 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     public Order createOrder(Cart cart) {
-
         List<OrderItem> orderItems = cart.getItems().stream()
                 .map(cartItem -> {
                     OrderItem orderItem = new OrderItem();
@@ -31,7 +31,6 @@ public class OrderService {
                 })
                 .collect(Collectors.toList());
 
-
         Order order = new Order();
         order.setUserId(cart.getUserId());
         order.setItems(orderItems);
@@ -41,5 +40,24 @@ public class OrderService {
         order.setTotalAmount(cart.getTotalPrice());
 
         return orderRepository.save(order);
+    }
+
+    public Order getOrderById(String orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+    }
+
+    public List<Order> getOrdersByUserId(Long userId) {
+        return orderRepository.findByUserId(userId);
+    }
+
+    public Order updateOrderStatus(String orderId, OrderStatus status) {
+        Order order = getOrderById(orderId);
+        order.setStatus(status);
+        return orderRepository.save(order);
+    }
+
+    public void deleteOrder(String orderId) {
+        Order order = getOrderById(orderId);
+        orderRepository.delete(order);
     }
 }
