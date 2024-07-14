@@ -36,7 +36,7 @@ public class UserControllerMVC {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id, @AuthenticationPrincipal UserDetails authenticatedUser, @RequestHeader("Authorization") String bearerToken) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id, @AuthenticationPrincipal UserDetails authenticatedUser) {
         UserResponseDTO user = userService.getUserById(id);
 //        System.out.println("Token: " + bearerToken);
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -88,6 +88,7 @@ public class UserControllerMVC {
             if (!(user.getRoles().contains("ADMIN") || (user.getEmail().equals(authenticatedUser.getUsername())))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
+            System.out.println("deleting user: " + id);
             userService.deleteUser(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -99,12 +100,12 @@ public class UserControllerMVC {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<UserResponseDTO> patchUser(@PathVariable Long id, @RequestBody UserRequestDTO userRequestDTO, @AuthenticationPrincipal UserDetails authenticatedUser) {
         UserResponseDTO user = userService.getUserById(id);
-        UserResponseDTO sample = new UserResponseDTO();
-        sample.setUsername(authenticatedUser.getUsername());
         System.out.println("Authenticated user username: "+authenticatedUser.getUsername());
+        System.out.println("user: " + user);
+        System.out.println("user long id: " + id);
         if (user != null) {
             if (!(user.getRoles().contains("ADMIN") || (user.getEmail().equals(authenticatedUser.getUsername())))) {
-                return new ResponseEntity<>(sample, HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             try {
                 UserResponseDTO updatedUser = userService.patchUser(id, userRequestDTO);

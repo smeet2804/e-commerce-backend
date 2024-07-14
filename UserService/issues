@@ -18,4 +18,12 @@ if (authorizationHeader == null){
     response.getWriter().println("Unauthorized");
 }
 
+even with this
+delete test cases passes, ensure spring security is enabled for test cases to replicate
+temp fix add return; if authorizationHeader is null
 -----------------------
+
+------ disabled oauth2 security for test cases -------
+https://stackoverflow.com/questions/44412128/spring-boot-integration-test-ignoring-secure-false-in-autoconfiguremockmvc-annot
+------------------------------------------------------
+

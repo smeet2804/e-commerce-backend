@@ -69,6 +69,7 @@ public class CustomOpaqueTokenAuthenticationFilter extends OncePerRequestFilter 
     private void handleUserAuthentication(String email, String token, Map<String, Object> userInfo, HttpServletRequest request) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
+            System.out.println("creating user");
             user = createUser(userInfo, email);
         }
 

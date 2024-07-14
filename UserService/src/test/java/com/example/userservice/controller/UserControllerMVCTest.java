@@ -225,6 +225,7 @@ public class UserControllerMVCTest {
         patchedUser.setEmail("alice.smith@example.com");
         patchedUser.setUsername("alice");
         patchedUser.setRoles(Set.of("USER", "ADMIN"));
+        when(userService.getUserById(1L)).thenReturn(existingUser);
 
         when(userService.patchUser(1L, userPatch)).thenReturn(patchedUser);
 
