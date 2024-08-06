@@ -40,11 +40,11 @@ public class CartControllerTest {
         // Arrange
         AddToCartRequestDTO request = new AddToCartRequestDTO();
         request.setUserId(1L);
-        request.setProductId("123");
+        request.setProductId(1L);
         request.setQuantity(2);
 
         CartItemResponseDTO item = new CartItemResponseDTO();
-        item.setProductId("123");
+        item.setProductId(1L);
         item.setQuantity(2);
         item.setPrice(20.0);
         item.setProductName("Product 123");
@@ -75,14 +75,14 @@ public class CartControllerTest {
         Long userId = 1L;
 
         CartItemResponseDTO item1 = new CartItemResponseDTO();
-        item1.setProductId("123");
+        item1.setProductId(1L);
         item1.setQuantity(2);
         item1.setPrice(20.0);
         item1.setProductName("Product 123");
         item1.setProductDescription("Description for product 123");
 
         CartItemResponseDTO item2 = new CartItemResponseDTO();
-        item2.setProductId("456");
+        item2.setProductId(2L);
         item2.setQuantity(1);
         item2.setPrice(15.0);
         item2.setProductName("Product 456");
@@ -134,10 +134,10 @@ public class CartControllerTest {
         // Arrange
         RemoveFromCartRequestDTO request = new RemoveFromCartRequestDTO();
         request.setUserId(1L);
-        request.setProductId("123");
+        request.setProductId(1L);
 
         CartItemResponseDTO item = new CartItemResponseDTO();
-        item.setProductId("456");
+        item.setProductId(2L);
         item.setQuantity(1);
         item.setPrice(15.0);
         item.setProductName("Product 456");

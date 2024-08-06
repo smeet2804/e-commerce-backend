@@ -47,7 +47,7 @@ class CartServiceTest {
         // Arrange
         AddToCartRequestDTO request = new AddToCartRequestDTO();
         request.setUserId(1L);
-        request.setProductId("123");
+        request.setProductId(1L);
         request.setQuantity(2);
 
         Cart cart = new Cart();
@@ -56,7 +56,7 @@ class CartServiceTest {
 
         ProductPriceDTO productPriceDTO = new ProductPriceDTO();
         productPriceDTO.setPrice(10.0);
-        when(productClient.getProductPrice("123")).thenReturn(productPriceDTO);
+        when(productClient.getProductPrice(1L)).thenReturn(productPriceDTO);
 
         // Act
         CartResponseDTO response = cartService.addToCart(request);
@@ -64,7 +64,7 @@ class CartServiceTest {
         // Assert
         assertNotNull(response);
         assertEquals(1, response.getItems().size());
-        assertEquals("123", response.getItems().get(0).getProductId());
+        assertEquals(1L, response.getItems().get(0).getProductId());
         assertEquals(2, response.getItems().get(0).getQuantity());
         assertEquals(20.0, response.getItems().get(0).getPrice());
 
@@ -78,7 +78,7 @@ class CartServiceTest {
         Cart cart = new Cart();
         cart.setUserId(userId);
         CartItem cartItem = new CartItem();
-        cartItem.setProductId("123");
+        cartItem.setProductId(1L);
         cartItem.setQuantity(2);
         cart.getItems().add(cartItem);
 
@@ -88,7 +88,7 @@ class CartServiceTest {
         product.setName("Product 123");
         product.setDescription("Description for product 123");
         product.setPrice(10.0);
-        when(productClient.getProductDetails("123")).thenReturn(product);
+        when(productClient.getProductDetails(1L)).thenReturn(product);
 
         // Act
         CartResponseDTO response = cartService.reviewCart(userId);
@@ -128,12 +128,12 @@ class CartServiceTest {
         // Arrange
         RemoveFromCartRequestDTO request = new RemoveFromCartRequestDTO();
         request.setUserId(1L);
-        request.setProductId("123");
+        request.setProductId(1L);
 
         Cart cart = new Cart();
         cart.setUserId(1L);
         CartItem cartItem = new CartItem();
-        cartItem.setProductId("123");
+        cartItem.setProductId(1L);
         cartItem.setQuantity(2);
         cartItem.setPrice(20.0);
         cart.addItem(cartItem);
@@ -142,7 +142,7 @@ class CartServiceTest {
 
         ProductPriceDTO productPriceDTO = new ProductPriceDTO();
         productPriceDTO.setPrice(10.0);
-        when(productClient.getProductPrice("123")).thenReturn(productPriceDTO);
+        when(productClient.getProductPrice(1L)).thenReturn(productPriceDTO);
 
         // Act
         CartResponseDTO response = cartService.removeFromCart(request);

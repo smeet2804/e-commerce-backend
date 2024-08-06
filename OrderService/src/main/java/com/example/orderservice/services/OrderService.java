@@ -37,6 +37,7 @@ public class OrderService {
         order.setAddress(cart.getAddress());
         order.setPaymentMethod(cart.getPaymentMethod());
         order.setStatus(OrderStatus.PENDING);
+        System.out.println("Total Price cart: "+cart.getTotalPrice());
         order.setTotalAmount(cart.getTotalPrice());
 
         return orderRepository.save(order);

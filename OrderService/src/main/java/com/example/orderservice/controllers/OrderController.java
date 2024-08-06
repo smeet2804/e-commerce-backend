@@ -17,7 +17,7 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping
-    public String createOrder(@RequestBody Cart cart) {
+    public Long createOrder(@RequestBody Cart cart) {
         Order order = orderService.createOrder(cart);
         return order.getId();
     }

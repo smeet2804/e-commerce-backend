@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class RemoveFromCartRequestDTO {
     private Long userId;
-    private String productId;
+    private Long productId;
 }

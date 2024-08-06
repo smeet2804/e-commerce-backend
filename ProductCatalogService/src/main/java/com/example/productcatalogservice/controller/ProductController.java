@@ -65,6 +65,9 @@ public class ProductController {
 
     @GetMapping("/price/{productId}")
     public ResponseEntity<ProductPriceDTO> getProductPrice(@PathVariable Long productId) {
+        System.out.println("*******************************");
+        System.out.println(productService.getProductById(productId));
+        System.out.println("*******************************");
         ProductPriceDTO productPriceDTO = productService.getProductPriceById(productId);
         return ResponseEntity.ok(productPriceDTO);
     }

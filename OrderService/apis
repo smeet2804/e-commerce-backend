@@ -1,0 +1,129 @@
+### Create Order
+
+**Request:**
+```
+POST /orders
+Content-Type: application/json
+
+{
+    "userId": 123,
+    "items": [
+        {"productId": 1, "quantity": 2, "price": 50.0},
+        {"productId": 2, "quantity": 1, "price": 100.0}
+    ],
+    "address": "123 Main St, Anytown, USA",
+    "paymentMethod": "Credit Card",
+    "totalAmount": 200.0
+}
+```
+
+**Response:**
+```
+200 OK
+Content-Type: application/json
+
+5
+```
+
+### View Order
+
+**Request:**
+```
+GET /orders/5
+```
+
+**Response:**
+```
+200 OK
+Content-Type: application/json
+
+{
+    "id": 5,
+    "userId": 123,
+    "items": [
+        {"productId": 1, "quantity": 2, "price": 50.0},
+        {"productId": 2, "quantity": 1, "price": 100.0}
+    ],
+    "address": "123 Main St, Anytown, USA",
+    "paymentMethod": "Credit Card",
+    "status": "PENDING",
+    "totalAmount": 200.0
+}
+```
+
+### View Orders by User
+
+**Request:**
+```
+GET /orders/user/123
+```
+
+**Response:**
+```
+200 OK
+Content-Type: application/json
+
+[
+    {
+        "id": 5,
+        "userId": 123,
+        "items": [
+            {"productId": 1, "quantity": 2, "price": 50.0},
+            {"productId": 2, "quantity": 1, "price": 100.0}
+        ],
+        "address": "123 Main St, Anytown, USA",
+        "paymentMethod": "Credit Card",
+        "status": "PENDING",
+        "totalAmount": 200.0
+    },
+    {
+        "id": 6,
+        "userId": 123,
+        "items": [
+            {"productId": 3, "quantity": 1, "price": 150.0}
+        ],
+        "address": "456 Elm St, Othertown, USA",
+        "paymentMethod": "PayPal",
+        "status": "SHIPPED",
+        "totalAmount": 150.0
+    }
+]
+```
+
+### Update Order Status
+
+**Request:**
+```
+PUT /orders/5/status?status=SHIPPED
+```
+
+**Response:**
+```
+200 OK
+Content-Type: application/json
+
+{
+    "id": 5,
+    "userId": 123,
+    "items": [
+        {"productId": 1, "quantity": 2, "price": 50.0},
+        {"productId": 2, "quantity": 1, "price": 100.0}
+    ],
+    "address": "123 Main St, Anytown, USA",
+    "paymentMethod": "Credit Card",
+    "status": "SHIPPED",
+    "totalAmount": 200.0
+}
+```
+
+### Delete Order
+
+**Request:**
+```
+DELETE /orders/5
+```
+
+**Response:**
+```
+204 No Content
+```

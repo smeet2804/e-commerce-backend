@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-@FeignClient(name = "orderservice", configuration = FeignConfig.class)
+@FeignClient(name = "OrderService", configuration = FeignConfig.class)
 public interface OrderClient {
     @PostMapping("/orders")
     String createOrder(@RequestBody Cart cart);

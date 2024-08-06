@@ -1,0 +1,139 @@
+### 1. Add to Cart API
+
+#### Request
+```json
+POST /cart/add
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "productId": "prod-123",
+    "quantity": 2
+}
+```
+
+#### Response
+```json
+{
+    "id": 1,
+    "userId": 1,
+    "items": [
+        {
+            "id": 1,
+            "productId": "prod-123",
+            "quantity": 2,
+            "price": 19.99,
+            "productName": "Product Name 1",
+            "productDescription": "Description of Product 1"
+        }
+    ],
+    "totalPrice": 39.98,
+    "address": null,
+    "paymentMethod": null
+}
+```
+
+### 2. Review Cart API
+
+#### Request
+```json
+GET /cart/review/1
+```
+
+#### Response
+```json
+{
+    "id": 1,
+    "userId": 1,
+    "items": [
+        {
+            "id": 1,
+            "productId": "prod-123",
+            "quantity": 2,
+            "price": 19.99,
+            "productName": "Product Name 1",
+            "productDescription": "Description of Product 1"
+        },
+        {
+            "id": 2,
+            "productId": "prod-456",
+            "quantity": 1,
+            "price": 49.99,
+            "productName": "Product Name 2",
+            "productDescription": "Description of Product 2"
+        }
+    ],
+    "totalPrice": 89.97,
+    "address": null,
+    "paymentMethod": null
+}
+```
+
+### 3. Checkout API
+
+#### Request
+```json
+POST /cart/checkout
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "address": "123 Main St, City, Country",
+    "paymentMethod": "Credit Card"
+}
+```
+
+#### Response
+```json
+{
+    "message": "Checkout successful. Your order will be delivered to 123 Main St, City, Country."
+}
+```
+
+### 4. Remove from Cart API
+
+#### Request
+```json
+DELETE /cart/remove
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "productId": "prod-123"
+}
+```
+
+#### Response
+```json
+{
+    "id": 1,
+    "userId": 1,
+    "items": [
+        {
+            "id": 2,
+            "productId": "prod-456",
+            "quantity": 1,
+            "price": 49.99,
+            "productName": "Product Name 2",
+            "productDescription": "Description of Product 2"
+        }
+    ],
+    "totalPrice": 49.99,
+    "address": null,
+    "paymentMethod": null
+}
+```
+
+### 5. Delete Cart API
+
+#### Request
+```json
+DELETE /cart/delete/1
+```
+
+#### Response
+```json
+{
+    "message": "Cart deleted successfully"
+}
+```

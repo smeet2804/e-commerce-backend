@@ -33,7 +33,7 @@ public class Cart {
     public void addItem(CartItem item) {
         items.add(item);
     }
-    public void removeItem(String productId) {
+    public void removeItem(Long productId) {
         items.removeIf(item -> item.getProductId().equals(productId));
     }
 }
