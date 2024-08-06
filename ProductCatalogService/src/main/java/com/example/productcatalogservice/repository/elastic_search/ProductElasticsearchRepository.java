@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 import java.util.List;
 
-public interface ProductElasticsearchRepository extends ElasticsearchRepository<Product, String>{
+public interface ProductElasticsearchRepository extends ElasticsearchRepository<Product, Long>{
     List<Product> findByNameContaining(String name);
     Page<Product> findByCategoriesContaining(String category, Pageable pageable);
 

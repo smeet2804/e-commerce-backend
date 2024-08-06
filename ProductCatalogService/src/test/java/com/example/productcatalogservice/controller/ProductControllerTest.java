@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -42,12 +41,12 @@ public class ProductControllerTest {
     public void getProduct_WhenProductExists_ReturnsProduct() throws Exception {
         // Arrange
         ProductResponseDTO product = new ProductResponseDTO();
-        product.setId("1");
+        product.setId(1L);
         product.setName("Product 1");
         product.setDescription("Description of Product 1");
         product.setPrice(100.0);
 
-        when(productService.getProductById("1")).thenReturn(product);
+        when(productService.getProductById(1L)).thenReturn(product);
 
         // Act and Assert
         mockMvc.perform(get("/products/1"))
@@ -55,7 +54,7 @@ public class ProductControllerTest {
                 .andExpect(content().string(objectMapper.writeValueAsString(product)));
 
         // Verify
-        verify(productService).getProductById("1");
+        verify(productService).getProductById(1L);
     }
 
     @Test
@@ -64,13 +63,13 @@ public class ProductControllerTest {
         // Arrange
         List<ProductResponseDTO> productList = new ArrayList<>();
         ProductResponseDTO product1 = new ProductResponseDTO();
-        product1.setId("1");
+        product1.setId(1L);
         product1.setName("Product 1");
         product1.setDescription("Description of Product 1");
         product1.setPrice(100.0);
 
         ProductResponseDTO product2 = new ProductResponseDTO();
-        product2.setId("2");
+        product2.setId(2L);
         product2.setName("Product 2");
         product2.setDescription("Description of Product 2");
         product2.setPrice(200.0);
@@ -96,13 +95,13 @@ public class ProductControllerTest {
         // Arrange
         List<ProductResponseDTO> productList = new ArrayList<>();
         ProductResponseDTO product1 = new ProductResponseDTO();
-        product1.setId("1");
+        product1.setId(1L);
         product1.setName("Product 1");
         product1.setDescription("Description of Product 1");
         product1.setPrice(100.0);
 
         ProductResponseDTO product2 = new ProductResponseDTO();
-        product2.setId("2");
+        product2.setId(2L);
         product2.setName("Product 2");
         product2.setDescription("Description of Product 2");
         product2.setPrice(200.0);
@@ -134,7 +133,7 @@ public class ProductControllerTest {
         productToCreate.setPrice(100.0);
 
         ProductResponseDTO createdProduct = new ProductResponseDTO();
-        createdProduct.setId("1");
+        createdProduct.setId(1L);
         createdProduct.setName("Product 1");
         createdProduct.setDescription("Description of Product 1");
         createdProduct.setPrice(100.0);
@@ -162,7 +161,7 @@ public class ProductControllerTest {
         productToUpdate.setPrice(150.0);
 
         ProductResponseDTO updatedProduct = new ProductResponseDTO();
-        updatedProduct.setId("1");
+        updatedProduct.setId(1L);
         updatedProduct.setName("Updated Product");
         updatedProduct.setDescription("Updated Description");
         updatedProduct.setPrice(150.0);
@@ -190,7 +189,7 @@ public class ProductControllerTest {
                 .andExpect(status().isNoContent());
 
         // Verify
-        verify(productService).deleteProduct("1");
+        verify(productService).deleteProduct(1L);
     }
 
     @Test
@@ -198,10 +197,10 @@ public class ProductControllerTest {
     public void getProductPrice_WhenProductExists_ReturnsProductPrice() throws Exception {
         // Arrange
         ProductPriceDTO productPrice = new ProductPriceDTO();
-        productPrice.setProductId("1");
+        productPrice.setProductId(1L);
         productPrice.setPrice(100.0);
 
-        when(productService.getProductPriceById("1")).thenReturn(productPrice);
+        when(productService.getProductPriceById(1L)).thenReturn(productPrice);
 
         // Act and Assert
         mockMvc.perform(get("/products/price/1"))
@@ -209,6 +208,6 @@ public class ProductControllerTest {
                 .andExpect(content().string(objectMapper.writeValueAsString(productPrice)));
 
         // Verify
-        verify(productService).getProductPriceById("1");
+        verify(productService).getProductPriceById(1L);
     }
 }

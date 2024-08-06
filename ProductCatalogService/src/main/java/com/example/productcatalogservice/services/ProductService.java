@@ -26,7 +26,7 @@ public class ProductService implements ProductServiceI {
     private ProductJpaRepository productJpaRepository;
 
     @Cacheable(value = "product", key = "#id")
-    public ProductResponseDTO getProductById(String id) {
+    public ProductResponseDTO getProductById(Long id) {
         Product product = productElasticsearchRepository.findById(id).orElse(null);
         if (product == null) {
             product = productJpaRepository.findById(id).orElse(null);
@@ -58,13 +58,13 @@ public class ProductService implements ProductServiceI {
     }
 
     @CacheEvict(value = "product", key = "#id")
-    public void deleteProduct(String id) {
+    public void deleteProduct(Long id) {
         productJpaRepository.deleteById(id);
         productElasticsearchRepository.deleteById(id);
     }
 
     @CachePut(value = "product", key = "#product.price")
-    public ProductPriceDTO getProductPriceById(String productId) {
+    public ProductPriceDTO getProductPriceById(Long productId) {
         Product product = productJpaRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 

@@ -1,12 +1,22 @@
-https://medium.com/simform-engineering/spring-boot-caching-with-redis-1a36f719309f
-https://javatechonline.com/how-to-implement-redis-cache-in-spring-boot-application/
-https://stackoverflow.com/questions/43879279/spring-boot-redis-configuration-not-working
-https://medium.com/@eminyildiz122/data-synchronization-between-postgre-and-elasticsearch-using-logstash-and-performing-read-and-write-09c0fc068abb
+-----Redis----
+1. https://medium.com/simform-engineering/spring-boot-caching-with-redis-1a36f719309f
+2. https://javatechonline.com/how-to-implement-redis-cache-in-spring-boot-application/
+3. https://stackoverflow.com/questions/43879279/spring-boot-redis-configuration-not-working
+4. https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-windows/
 
-https://stackoverflow.com/questions/71492404/elasticsearch-showing-received-plaintext-http-traffic-on-an-https-channel-in-con
 
+-----Elastic Search-----
+
+1. https://medium.com/@eminyildiz122/data-synchronization-between-postgre-and-elasticsearch-using-logstash-and-performing-read-and-write-09c0fc068abb
+2. https://stackoverflow.com/questions/71492404/elasticsearch-showing-received-plaintext-http-traffic-on-an-https-channel-in-con
+3. https://stackoverflow.com/questions/33303786/where-does-elasticsearch-store-its-data
+4. https://stackoverflow.com/questions/22924300/removing-data-from-elasticsearch
+5. https://stackoverflow.com/questions/45431574/not-auto-generating-id-for-long-type-but-for-string-type-field-in-spring-data-el
+
+
+To start redis
+1. change ip in /etc/redis/redis.conf
+2. change ip in application.properties
+
+To start elasticsearch
 elasticsearch -E xpack.security.enabled=false
-
-https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-windows/
-
-https://stackoverflow.com/questions/45431574/not-auto-generating-id-for-long-type-but-for-string-type-field-in-spring-data-el

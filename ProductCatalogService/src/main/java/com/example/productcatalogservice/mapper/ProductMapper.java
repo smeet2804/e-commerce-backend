@@ -21,6 +21,7 @@ public class ProductMapper {
         product.setCategories(dto.getCategories());
         product.setImages(dto.getImages());
         product.setSpecifications(dto.getSpecifications());
+        product.setPrice(dto.getPrice());
         return product;
     }
 
@@ -36,6 +37,7 @@ public class ProductMapper {
         responseDTO.setCategories(product.getCategories());
         responseDTO.setImages(product.getImages());
         responseDTO.setSpecifications(product.getSpecifications());
+        responseDTO.setPrice(product.getPrice());
         return responseDTO;
     }
 

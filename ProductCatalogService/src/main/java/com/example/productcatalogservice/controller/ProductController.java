@@ -18,7 +18,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable String id) {
+    public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id) {
         ProductResponseDTO productResponseDTO = productService.getProductById(id);
         if (productResponseDTO == null) {
             return ResponseEntity.notFound().build();
@@ -47,21 +47,24 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable String id, @RequestBody ProductRequestDTO productRequestDTO) {
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO productRequestDTO) {
         ProductRequestDTO updatedProductRequestDTO = productRequestDTO;
         updatedProductRequestDTO.setId(id);
+        if (productService.getProductById(id) == null){
+            return ResponseEntity.notFound().build();
+        }
         ProductResponseDTO productResponseDTO = productService.saveProduct(updatedProductRequestDTO);
         return ResponseEntity.ok(productResponseDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/price/{productId}")
-    public ResponseEntity<ProductPriceDTO> getProductPrice(@PathVariable String productId) {
+    public ResponseEntity<ProductPriceDTO> getProductPrice(@PathVariable Long productId) {
         ProductPriceDTO productPriceDTO = productService.getProductPriceById(productId);
         return ResponseEntity.ok(productPriceDTO);
     }

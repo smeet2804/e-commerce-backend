@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ProductRequestDTO implements Serializable {
-    private String id;
+    private Long id;
     private String name;
     private String description;
     private List<String> categories;

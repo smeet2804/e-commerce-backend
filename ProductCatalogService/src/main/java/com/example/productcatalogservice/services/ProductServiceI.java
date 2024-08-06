@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProductServiceI {
 
-    ProductResponseDTO getProductById(String id);
+    ProductResponseDTO getProductById(Long id);
 
     List<ProductResponseDTO> searchProducts(String keyword);
 
@@ -16,7 +16,7 @@ public interface ProductServiceI {
 
     ProductResponseDTO saveProduct(ProductRequestDTO productRequestDTO);
 
-    void deleteProduct(String id);
+    void deleteProduct(Long id);
 
-    ProductPriceDTO getProductPriceById(String productId);
+    ProductPriceDTO getProductPriceById(Long productId);
 }

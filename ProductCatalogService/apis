@@ -1,0 +1,474 @@
+### 1. Create a New Product
+**Endpoint:** `POST /products`
+
+#### Request 1:
+**Request Body:**
+```json
+{
+    "name": "Smartphone X",
+    "description": "Latest model with high-end features",
+    "categories": ["Electronics", "Mobile Phones"],
+    "images": ["image1.jpg", "image2.jpg"],
+    "specifications": "64GB, 4GB RAM, Dual Camera",
+    "price": 999.99
+}
+```
+
+**Response:**
+```json
+{
+    "id": "1",
+    "name": "Smartphone X",
+    "description": "Latest model with high-end features",
+    "categories": ["Electronics", "Mobile Phones"],
+    "images": ["image1.jpg", "image2.jpg"],
+    "specifications": "64GB, 4GB RAM, Dual Camera",
+    "price": 999.99
+}
+```
+
+#### Request 2:
+**Request Body:**
+```json
+{
+    "name": "Laptop Pro",
+    "description": "High-performance laptop for professionals",
+    "categories": ["Electronics", "Computers"],
+    "images": ["laptop1.jpg", "laptop2.jpg"],
+    "specifications": "16GB RAM, 512GB SSD, i7 Processor",
+    "price": 1299.99
+}
+```
+
+**Response:**
+```json
+{
+    "id": "2",
+    "name": "Laptop Pro",
+    "description": "High-performance laptop for professionals",
+    "categories": ["Electronics", "Computers"],
+    "images": ["laptop1.jpg", "laptop2.jpg"],
+    "specifications": "16GB RAM, 512GB SSD, i7 Processor",
+    "price": 1299.99
+}
+```
+
+#### Request 3:
+**Request Body:**
+```json
+{
+    "name": "Wireless Headphones",
+    "description": "Noise-canceling over-ear headphones",
+    "categories": ["Electronics", "Audio"],
+    "images": ["headphones1.jpg", "headphones2.jpg"],
+    "specifications": "Bluetooth, 20-hour battery life",
+    "price": 199.99
+}
+```
+
+**Response:**
+```json
+{
+    "id": "3",
+    "name": "Wireless Headphones",
+    "description": "Noise-canceling over-ear headphones",
+    "categories": ["Electronics", "Audio"],
+    "images": ["headphones1.jpg", "headphones2.jpg"],
+    "specifications": "Bluetooth, 20-hour battery life",
+    "price": 199.99
+}
+```
+
+### 2. Fetch Product by ID
+**Endpoint:** `GET /products/{id}`
+
+#### Request 1:
+**URL:** `/products/1`
+
+**Response:**
+```json
+{
+    "id": "1",
+    "name": "Smartphone X",
+    "description": "Latest model with high-end features",
+    "categories": ["Electronics", "Mobile Phones"],
+    "images": ["image1.jpg", "image2.jpg"],
+    "specifications": "64GB, 4GB RAM, Dual Camera",
+    "price": 999.99
+}
+```
+
+#### Request 2:
+**URL:** `/products/2`
+
+**Response:**
+```json
+{
+    "id": "2",
+    "name": "Laptop Pro",
+    "description": "High-performance laptop for professionals",
+    "categories": ["Electronics", "Computers"],
+    "images": ["laptop1.jpg", "laptop2.jpg"],
+    "specifications": "16GB RAM, 512GB SSD, i7 Processor",
+    "price": 1299.99
+}
+```
+
+#### Request 3:
+**URL:** `/products/3`
+
+**Response:**
+```json
+{
+    "id": "3",
+    "name": "Wireless Headphones",
+    "description": "Noise-canceling over-ear headphones",
+    "categories": ["Electronics", "Audio"],
+    "images": ["headphones1.jpg", "headphones2.jpg"],
+    "specifications": "Bluetooth, 20-hour battery life",
+    "price": 199.99
+}
+```
+
+### 3. Update a Product
+**Endpoint:** `PUT /products/{id}`
+
+#### Request 1:
+**URL:** `/products/1`
+
+**Request Body:**
+```json
+{
+    "name": "Smartphone X Pro",
+    "description": "Upgraded model with improved features",
+    "categories": ["Electronics", "Mobile Phones"],
+    "images": ["image1.jpg", "image2.jpg", "image3.jpg"],
+    "specifications": "128GB, 6GB RAM, Triple Camera",
+    "price": 1099.99
+}
+```
+
+**Response:**
+```json
+{
+    "id": "1",
+    "name": "Smartphone X Pro",
+    "description": "Upgraded model with improved features",
+    "categories": ["Electronics", "Mobile Phones"],
+    "images": ["image1.jpg", "image2.jpg", "image3.jpg"],
+    "specifications": "128GB, 6GB RAM, Triple Camera",
+    "price": 1099.99
+}
+```
+
+#### Request 2:
+**URL:** `/products/2`
+
+**Request Body:**
+```json
+{
+    "name": "Laptop Pro 2021",
+    "description": "Latest edition with enhanced performance",
+    "categories": ["Electronics", "Computers"],
+    "images": ["laptop1.jpg", "laptop2.jpg", "laptop3.jpg"],
+    "specifications": "32GB RAM, 1TB SSD, i9 Processor",
+    "price": 1499.99
+}
+```
+
+**Response:**
+```json
+{
+    "id": "2",
+    "name": "Laptop Pro 2021",
+    "description": "Latest edition with enhanced performance",
+    "categories": ["Electronics", "Computers"],
+    "images": ["laptop1.jpg", "laptop2.jpg", "laptop3.jpg"],
+    "specifications": "32GB RAM, 1TB SSD, i9 Processor",
+    "price": 1499.99
+}
+```
+
+#### Request 3:
+**URL:** `/products/3`
+
+**Request Body:**
+```json
+{
+    "name": "Wireless Headphones Plus",
+    "description": "Enhanced model with better noise-canceling",
+    "categories": ["Electronics", "Audio"],
+    "images": ["headphones1.jpg", "headphones2.jpg", "headphones3.jpg"],
+    "specifications": "Bluetooth, 30-hour battery life",
+    "price": 249.99
+}
+```
+
+**Response:**
+```json
+{
+    "id": "3",
+    "name": "Wireless Headphones Plus",
+    "description": "Enhanced model with better noise-canceling",
+    "categories": ["Electronics", "Audio"],
+    "images": ["headphones1.jpg", "headphones2.jpg", "headphones3.jpg"],
+    "specifications": "Bluetooth, 30-hour battery life",
+    "price": 249.99
+}
+```
+
+### 4. Delete a Product
+**Endpoint:** `DELETE /products/{id}`
+
+#### Request 1:
+**URL:** `/products/1`
+
+**Response:**
+```json
+{
+    "message": "Product with id 1 deleted successfully."
+}
+```
+
+#### Request 2:
+**URL:** `/products/2`
+
+**Response:**
+```json
+{
+    "message": "Product with id 2 deleted successfully."
+}
+```
+
+#### Request 3:
+**URL:** `/products/3`
+
+**Response:**
+```json
+{
+    "message": "Product with id 3 deleted successfully."
+}
+```
+
+### 5. Fetch Product Price by ID
+**Endpoint:** `GET /products/price/{productId}`
+
+#### Request 1:
+**URL:** `/products/price/1`
+
+**Response:**
+```json
+{
+    "productId": "1",
+    "price": 999.99
+}
+```
+
+#### Request 2:
+**URL:** `/products/price/2`
+
+**Response:**
+```json
+{
+    "productId": "2",
+    "price": 1299.99
+}
+```
+
+#### Request 3:
+**URL:** `/products/price/3`
+
+**Response:**
+```json
+{
+    "productId": "3",
+    "price": 199.99
+}
+```
+
+### 6. Search Products by Name
+**Endpoint:** `GET /products/search`
+
+#### Request 1:
+**URL:** `/products/search?keyword=Smartphone`
+
+**Response:**
+```json
+[
+    {
+        "id": "1",
+        "name": "Smartphone X",
+        "description": "Latest model with high-end features",
+        "categories": ["Electronics", "Mobile Phones"],
+        "images": ["image1.jpg", "image2.jpg"],
+        "specifications": "64GB, 4GB RAM, Dual Camera",
+        "price": 999.99
+    },
+    {
+        "id": "4",
+        "name": "Smartphone Y",
+        "description": "Budget model with basic features",
+        "categories": ["Electronics", "Mobile Phones"],
+        "images": ["image3.jpg", "image4.jpg"],
+        "specifications": "32GB, 2GB RAM, Single Camera",
+        "price": 399.99
+    }
+]
+```
+
+#### Request 2:
+**URL:** `/products/search?keyword=Laptop`
+
+**Response:**
+```json
+[
+    {
+        "id": "2",
+        "name": "Laptop Pro",
+        "description": "High-performance laptop for professionals",
+        "categories": ["Electronics", "Computers"],
+        "images": ["laptop1.jpg", "laptop2.jpg"],
+        "specifications": "16GB RAM, 512GB SSD, i7 Processor",
+        "price": 1299.99
+    },
+    {
+        "id": "5",
+        "name": "Laptop Air",
+        "description": "Lightweight laptop for everyday use",
+        "categories": ["Electronics", "Computers"],
+        "images": ["laptop3.jpg", "laptop4.jpg"],
+        "specifications": "8GB RAM, 256GB SSD, i5 Processor",
+        "price": 899.99
+    }
+]
+```
+
+#### Request 3:
+**URL:** `/products/search?keyword=Headphones`
+
+**Response:**
+```json
+[
+    {
+        "id": "3",
+        "name": "Wireless Headphones",
+        "description": "Noise-canceling over-ear headphones",
+        "categories": ["Electronics", "Audio"],
+        "images": ["headphones1.jpg", "headphones2.jpg"],
+        "specifications": "Bluetooth, 20-hour battery life",
+        "price": 199.99
+    },
+    {
+        "id": "6",
+        "name": "Gaming Headphones",
+        "description": "High-fidelity headphones for gamers",
+        "categories": ["Electronics", "Audio"],
+        "images": ["headphones3.jpg", "headphones4.jpg"],
+        "specifications": "Wired, Surround Sound",
+        "price": 149.99
+    }
+]
+```
+
+### 7. Get Products by Category
+**Endpoint:** `GET /products/category`
+
+#### Request 1:
+**URL:** `/products/category?category=Electronics&page=0&size=5`
+
+**Response:**
+```json
+[
+    {
+        "id": "1",
+        "name": "Smartphone X",
+        "description": "Latest model with high-end features",
+        "categories": ["Electronics", "Mobile Phones"],
+        "images": ["image1.jpg", "image2.jpg"],
+        "specifications": "64GB, 4GB RAM, Dual Camera",
+        "price": 999.99
+    },
+    {
+        "id": "2",
+        "name": "Laptop Pro",
+        "description": "High-performance laptop for professionals",
+        "categories": ["Electronics", "Computers"],
+        "images": ["laptop1.jpg", "laptop2.jpg"],
+        "specifications": "16GB RAM, 512GB SSD, i7 Processor",
+        "price": 1299.99
+    },
+    {
+        "id": "3",
+        "name": "Wireless Headphones",
+        "description": "Noise-canceling over-ear headphones",
+        "categories": ["Electronics", "Audio"],
+        "images": ["headphones1.jpg", "headphones2.jpg"],
+        "specifications": "Bluetooth, 20-hour battery life",
+        "price": 199.99
+    },
+    {
+        "id": "4",
+        "name": "Smartphone Y",
+        "description": "Budget model with basic features",
+        "categories": ["Electronics", "Mobile Phones"],
+        "images": ["image3.jpg", "image4.jpg"],
+        "specifications": "32GB, 2GB RAM, Single Camera",
+        "price": 399.99
+    },
+    {
+        "id": "5",
+        "name": "Laptop Air",
+        "description": "Lightweight laptop for everyday use",
+        "categories": ["Electronics", "Computers"],
+        "images": ["laptop3.jpg", "laptop4.jpg"],
+        "specifications": "8GB RAM, 256GB SSD, i5 Processor",
+        "price": 899.99
+    }
+]
+```
+
+#### Request 2:
+**URL:** `/products/category?category=Mobile%20Phones&page=0&size=2`
+
+**Response:**
+```json
+[
+    {
+        "id": "1",
+        "name": "Smartphone X",
+        "description": "Latest model with high-end features",
+        "categories": ["Electronics", "Mobile Phones"],
+        "images": ["image1.jpg", "image2.jpg"],
+        "specifications": "64GB, 4GB RAM, Dual Camera",
+        "price": 999.99
+    },
+    {
+        "id": "4",
+        "name": "Smartphone Y",
+        "description": "Budget model with basic features",
+        "categories": ["Electronics", "Mobile Phones"],
+        "images": ["image3.jpg", "image4.jpg"],
+        "specifications": "32GB, 2GB RAM, Single Camera",
+        "price": 399.99
+    }
+]
+```
+
+#### Request 3:
+**URL:** `/products/category?category=Audio&page=0&size=1`
+
+**Response:**
+```json
+[
+    {
+        "id": "3",
+        "name": "Wireless Headphones",
+        "description": "Noise-canceling over-ear headphones",
+        "categories": ["Electronics", "Audio"],
+        "images": ["headphones1.jpg", "headphones2.jpg"],
+        "specifications": "Bluetooth, 20-hour battery life",
+        "price": 199.99
+    }
+]
+```
+
