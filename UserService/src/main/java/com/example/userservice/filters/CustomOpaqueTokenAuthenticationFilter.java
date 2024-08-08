@@ -43,7 +43,7 @@ public class CustomOpaqueTokenAuthenticationFilter extends OncePerRequestFilter 
         }
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String accessToken = authorizationHeader.substring(7);
-
+            System.out.println("Access token: " + accessToken);
             try {
                 RestTemplate restTemplate = new RestTemplate();
                 String userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo";

@@ -18,6 +18,7 @@ public class EmailService {
         message.setTo(emailDTO.getTo());
         message.setSubject(emailDTO.getSubject());
         message.setText(emailDTO.getText());
+        System.out.println("Sending email to " + emailDTO.getTo());
         emailSender.send(message);
     }
 }

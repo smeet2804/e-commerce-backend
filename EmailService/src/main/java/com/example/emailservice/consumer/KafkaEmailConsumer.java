@@ -20,7 +20,6 @@ public class KafkaEmailConsumer {
     public void listen(String message) {
         try {
             EmailDTO emailDTO = objectMapper.readValue(message, EmailDTO.class);
-            System.out.println(emailDTO);
             emailService.sendSimpleMessage(emailDTO);
         } catch (Exception e) {
             e.printStackTrace();

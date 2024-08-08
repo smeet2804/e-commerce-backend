@@ -28,7 +28,7 @@ public class UserControllerMVC {
 
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<UserResponseDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -37,6 +37,7 @@ public class UserControllerMVC {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id, @AuthenticationPrincipal UserDetails authenticatedUser) {
+        System.out.println("Get user by id: " + id);
         UserResponseDTO user = userService.getUserById(id);
 //        System.out.println("Token: " + bearerToken);
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -47,7 +48,14 @@ public class UserControllerMVC {
 //        String token = userDetails.getToken();
 //        System.out.println("Token in controller: " + bearerToken);
         if (user != null) {
-            if (!(user.getRoles().contains("ADMIN") || (user.getEmail().equals(authenticatedUser.getUsername())))) {
+            // this is wrong, here it should be authenticatedUser
+            System.out.println("Authenticated User Authorities: " + authenticatedUser.getAuthorities());
+
+// Check if the user has "ADMIN" authority or is the owner
+            if (!(authenticatedUser.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().contains("ADMIN")) ||
+                    user.getEmail().equals(authenticatedUser.getUsername()))) {
+
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             return new ResponseEntity<>(user, HttpStatus.OK);
