@@ -1,10 +1,12 @@
 package com.example.orderservice.controllers;
 
-import com.example.orderservice.models.Cart;
-import com.example.orderservice.models.Order;
-import com.example.orderservice.models.OrderStatus;
+import com.example.orderservice.dtos.CartDTO;
+import com.example.orderservice.dtos.OrderRequestDTO;
+import com.example.orderservice.dtos.OrderResponseDTO;
+import com.example.orderservice.dtos.OrderStatusDTO;
 import com.example.orderservice.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,28 +19,32 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping
-    public Long createOrder(@RequestBody Cart cart) {
-        Order order = orderService.createOrder(cart);
-        return order.getId();
+    public ResponseEntity<Long> createOrder(@RequestBody CartDTO cartDTO) {
+        OrderResponseDTO orderDTO = orderService.createOrder(cartDTO);
+        return ResponseEntity.ok(orderDTO.getId());
     }
 
     @GetMapping("/{orderId}")
-    public Order viewOrder(@PathVariable String orderId) {
-        return orderService.getOrderById(orderId);
+    public ResponseEntity<OrderResponseDTO> viewOrder(@PathVariable Long orderId) {
+        OrderResponseDTO orderDTO = orderService.getOrderById(orderId);
+        return orderDTO != null ? ResponseEntity.ok(orderDTO) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/user/{userId}")
-    public List<Order> viewOrdersByUser(@PathVariable Long userId) {
-        return orderService.getOrdersByUserId(userId);
+    public ResponseEntity<List<OrderResponseDTO>> viewOrdersByUser(@PathVariable Long userId) {
+        List<OrderResponseDTO> orderDTOs = orderService.getOrdersByUserId(userId);
+        return ResponseEntity.ok(orderDTOs);
     }
 
     @PutMapping("/{orderId}/status")
-    public Order updateOrderStatus(@PathVariable String orderId, @RequestParam OrderStatus status) {
-        return orderService.updateOrderStatus(orderId, status);
+    public ResponseEntity<OrderResponseDTO> updateOrderStatus(@PathVariable Long orderId, @RequestBody OrderStatusDTO statusDTO) {
+        OrderResponseDTO orderDTO = orderService.updateOrderStatus(orderId, statusDTO.getStatus());
+        return orderDTO != null ? ResponseEntity.ok(orderDTO) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{orderId}")
-    public void deleteOrder(@PathVariable String orderId) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) {
         orderService.deleteOrder(orderId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,64 +1,59 @@
 package com.example.orderservice.services;
 
+import com.example.orderservice.dtos.CartDTO;
+import com.example.orderservice.dtos.OrderRequestDTO;
+import com.example.orderservice.dtos.OrderResponseDTO;
+import com.example.orderservice.mappers.OrderMapper;
 import com.example.orderservice.models.Order;
-import com.example.orderservice.models.OrderItem;
 import com.example.orderservice.models.OrderStatus;
-import com.example.orderservice.models.Cart;
 import com.example.orderservice.repositories.OrderRepository;
+import com.example.orderservice.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderService {
+public class OrderService implements OrderServiceI {
 
     @Autowired
     private OrderRepository orderRepository;
 
-    public Order createOrder(Cart cart) {
-        List<OrderItem> orderItems = cart.getItems().stream()
-                .map(cartItem -> {
-                    OrderItem orderItem = new OrderItem();
-                    orderItem.setProductId(cartItem.getProductId());
-                    orderItem.setQuantity(cartItem.getQuantity());
-                    orderItem.setPrice(cartItem.getPrice());
-                    orderItem.setProductName(cartItem.getProductName());
-                    orderItem.setProductDescription(cartItem.getProductDescription());
-                    return orderItem;
-                })
-                .collect(Collectors.toList());
-
+    @Override
+    public OrderResponseDTO createOrder(CartDTO cartDTO) {
         Order order = new Order();
-        order.setUserId(cart.getUserId());
-        order.setItems(orderItems);
-        order.setAddress(cart.getAddress());
-        order.setPaymentMethod(cart.getPaymentMethod());
-        order.setStatus(OrderStatus.PENDING);
-        System.out.println("Total Price cart: "+cart.getTotalPrice());
-        order.setTotalAmount(cart.getTotalPrice());
-
-        return orderRepository.save(order);
+        // Set order properties from cartDTO
+        orderRepository.save(order);
+        return OrderMapper.getOrderResponseDTOFromOrder(order);
     }
 
-    public Order getOrderById(String orderId) {
-        return orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+    @Override
+    public OrderResponseDTO getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElse(null);
+        return order != null ? OrderMapper.getOrderResponseDTOFromOrder(order) : null;
     }
 
-    public List<Order> getOrdersByUserId(Long userId) {
-        return orderRepository.findByUserId(userId);
+    @Override
+    public List<OrderResponseDTO> getOrdersByUserId(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        return orders.stream()
+                .map(OrderMapper::getOrderResponseDTOFromOrder)
+                .collect(Collectors.toList());
     }
 
-    public Order updateOrderStatus(String orderId, OrderStatus status) {
-        Order order = getOrderById(orderId);
-        order.setStatus(status);
-        return orderRepository.save(order);
+    @Override
+    public OrderResponseDTO updateOrderStatus(Long orderId, String status) {
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order != null) {
+            order.setStatus(OrderStatus.valueOf(status));
+            orderRepository.save(order);
+        }
+        return order != null ? OrderMapper.getOrderResponseDTOFromOrder(order) : null;
     }
 
-    public void deleteOrder(String orderId) {
-        Order order = getOrderById(orderId);
-        orderRepository.delete(order);
+    @Override
+    public void deleteOrder(Long orderId) {
+        orderRepository.deleteById(orderId);
     }
 }
