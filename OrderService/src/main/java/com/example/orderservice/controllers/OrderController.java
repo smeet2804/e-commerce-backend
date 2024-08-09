@@ -1,8 +1,10 @@
 package com.example.orderservice.controllers;
 
 import com.example.orderservice.dtos.CartDTO;
+import com.example.orderservice.dtos.OrderPaymentResponseDTO;
 import com.example.orderservice.dtos.OrderResponseDTO;
 import com.example.orderservice.dtos.OrderStatusDTO;
+import com.example.orderservice.mappers.OrderMapper;
 import com.example.orderservice.services.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,16 @@ public class OrderController {
         return orderDTO != null ? ResponseEntity.ok(orderDTO) : ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/payment/{orderId}")
+    public ResponseEntity<OrderPaymentResponseDTO> getOrderDetailsForPayment(@PathVariable Long orderId){
+        OrderResponseDTO orderResponseDTO = orderService.getOrderById(orderId);
+        if (orderResponseDTO != null) {
+            OrderPaymentResponseDTO orderPaymentResponseDTO = OrderMapper.getOrderPaymentResponseFromOrderResponseDTO(orderResponseDTO);
+            return ResponseEntity.ok(orderPaymentResponseDTO);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<OrderResponseDTO>> viewOrdersByUser(@PathVariable Long userId) {
         List<OrderResponseDTO> orderDTOs = orderService.getOrdersByUserId(userId);
@@ -56,11 +68,13 @@ public class OrderController {
     @PutMapping("/status/{orderId}")
     public ResponseEntity<OrderResponseDTO> updateOrderStatus(@PathVariable Long orderId, @RequestBody OrderStatusDTO statusDTO) {
 
+
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert requestAttributes != null;
         HttpServletRequest request = requestAttributes.getRequest();
 
         String authorizationHeader = request.getHeader("Authorization");
+        System.out.println("Authorization Header: "+authorizationHeader);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
 

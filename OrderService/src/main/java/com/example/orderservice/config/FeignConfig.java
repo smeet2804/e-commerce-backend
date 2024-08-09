@@ -12,9 +12,11 @@ public class FeignConfig {
             RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
             if (requestAttributes != null) {
                 String token = (String) requestAttributes.getAttribute("Authorization", RequestAttributes.SCOPE_REQUEST);
+
                 if (token != null) {
                     requestTemplate.header("Authorization", "Bearer " + token);
                 }
+
             }
         };
     }

@@ -1,6 +1,7 @@
 package com.example.orderservice.mappers;
 
 import com.example.orderservice.dtos.OrderItemDTO;
+import com.example.orderservice.dtos.OrderPaymentResponseDTO;
 import com.example.orderservice.dtos.OrderRequestDTO;
 import com.example.orderservice.dtos.OrderResponseDTO;
 import com.example.orderservice.models.Order;
@@ -82,4 +83,20 @@ public class OrderMapper {
         dto.setProductDescription(orderItem.getProductDescription());
         return dto;
     }
+
+    public static OrderPaymentResponseDTO getOrderPaymentResponseFromOrderResponseDTO(OrderResponseDTO orderResponseDTO){
+        System.out.println("Order ID: " + orderResponseDTO.getId());
+        System.out.println("User ID: " + orderResponseDTO.getUserId());
+        System.out.println("Order Status: " + orderResponseDTO.getStatus());
+        System.out.println("Order Total Amount: " + orderResponseDTO.getTotalAmount());
+
+        OrderPaymentResponseDTO orderPaymentResponseDTO = new OrderPaymentResponseDTO();
+        orderPaymentResponseDTO.setOrderId(orderResponseDTO.getId());
+        orderPaymentResponseDTO.setUserId(orderResponseDTO.getUserId());
+        orderPaymentResponseDTO.setPrice(orderResponseDTO.getTotalAmount());
+        orderPaymentResponseDTO.setAddress(orderResponseDTO.getAddress());
+        orderPaymentResponseDTO.setStatus(orderResponseDTO.getStatus());
+        return orderPaymentResponseDTO;
+    }
+
 }
