@@ -2,6 +2,7 @@ package com.example.paymentservice.services;
 import com.example.paymentservice.clients.OrderClient;
 import com.example.paymentservice.dtos.OrderDTO;
 import com.example.paymentservice.dtos.PaymentRequestDTO;
+import com.example.paymentservice.models.OrderStatusDTO;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentLink;
@@ -23,14 +24,16 @@ public class PaymentService {
     private OrderClient orderClient;
 
     public String generatePayment(PaymentRequestDTO paymentRequestDTO) throws StripeException {
-        String orderId = paymentRequestDTO.getOrderId();
+        Long orderId = paymentRequestDTO.getOrderId();
         Stripe.apiKey = apikey;
 
         // Fetch order details from OrderService
-        OrderDTO order = orderClient.getOrderById(orderId);
-        Long amount = order.getPrice();
-
-        Price price = getPrice(amount);
+        OrderDTO order = orderClient.getOrderDetailsForPayment(orderId);
+        System.out.println(order.getOrderId());
+        System.out.println(order.getAddress());
+        double amount = order.getPrice();
+        System.out.println("Payment Amount is: "+amount);
+        Price price = getPrice((long) amount);
 
         PaymentLinkCreateParams params =
                 PaymentLinkCreateParams.builder()
@@ -45,7 +48,9 @@ public class PaymentService {
         PaymentLink paymentLink = PaymentLink.create(params);
 
         // Update order status to PROCESSING
-        orderClient.updateOrderStatus(orderId, "COMPLETED");
+//        OrderStatusDTO orderStatusDTO = new OrderStatusDTO();
+//        orderStatusDTO.setStatus("PROCESSING");
+//        orderClient.updateOrderStatus(orderId, orderStatusDTO);
 
         return paymentLink.getUrl();
     }
