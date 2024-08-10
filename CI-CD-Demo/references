@@ -1,0 +1,33 @@
+---- stackoverflow - issues i faced ----
+
+
+https://stackoverflow.com/questions/60807697/docker-login-error-storing-credentials-the-stub-received-bad-data
+https://stackoverflow.com/questions/76975954/docker-pull-from-public-ecr-aws-results-in-403-forbidden-error
+https://stackoverflow.com/questions/45949212/not-able-to-login-to-aws-ecr-repository-through-docker-login-command
+
+
+
+Commands I ran in sequence:
+
+1. docker build -t public.ecr.aws/u0f0p0q3/ci-cd-demo:latest .
+
+
+2. aws configure
+
+3.
+for private ecr:
+aws ecr get-login-password --region <<your-region>> | docker login --username AWS --password-stdin <<your-ecr-repo-uri>>
+
+for public ecr:
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/u0f0p0q3/ci-cd-demo
+
+4.
+docker push public.ecr.aws/u0f0p0q3/ci-cd-demo:latest
+
+5. run on your local using
+docker run -p <local-port>:<container-port> <image>
+docker run -p 8080:8080 public.ecr.aws/u0f0p0q3/ci-cd-demo:latest
+
+
+---- setting up aws codebuild ----
+
