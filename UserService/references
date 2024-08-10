@@ -26,3 +26,6 @@ https://stackoverflow.com/questions/62256604/running-kafka-on-wsl-and-make-produ
 --To start kafka--
 Follow this: https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-windows/
 change ip in server.properties
+
+1. ~/kafka_2.13-3.8.0/bin/zookeeper-server-start.sh ~/kafka_2.13-3.8.0/config/zookeeper.properties
+2. ~/kafka_2.13-3.8.0/bin/kafka-server-start.sh ~/kafka_2.13-3.8.0/config/server.properties

@@ -1,10 +1,7 @@
 package com.example.orderservice.services;
 
 import com.example.orderservice.clients.UserClient;
-import com.example.orderservice.dtos.CartDTO;
-import com.example.orderservice.dtos.OrderRequestDTO;
-import com.example.orderservice.dtos.OrderResponseDTO;
-import com.example.orderservice.dtos.OrderStatusEmailDTO;
+import com.example.orderservice.dtos.*;
 import com.example.orderservice.mappers.OrderMapper;
 import com.example.orderservice.models.Order;
 import com.example.orderservice.models.OrderItem;

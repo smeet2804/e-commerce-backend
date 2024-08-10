@@ -1,5 +1,7 @@
 package com.example.paymentservice.controllers;
 
+import com.example.paymentservice.clients.OrderClient;
+import com.example.paymentservice.models.OrderStatusDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.stripe.Stripe;
@@ -21,10 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class WebhookController {
 
     private final ObjectMapper objectMapper;
+    private final OrderClient orderClient;
     @Value("${stripe.apiKey}")
     private String apikey;
-    public WebhookController(ObjectMapper objectMapper) {
+    public WebhookController(ObjectMapper objectMapper, OrderClient orderClient) {
         this.objectMapper = objectMapper;
+        this.orderClient = orderClient;
     }
 
     @PostMapping
@@ -45,19 +49,20 @@ public class WebhookController {
                 // instructions on how to handle this case, or return an error here.
                 System.out.println("No data object found");
             }
-            System.out.println(event.toString());
-            System.out.println(stripeObject.toString());
+            System.out.println(event.getType());
+//            System.out.println(stripeObject.toString());
             // Handle the event
-            switch (event.getType()) {
+            switch (event.getType().trim()) {
                 case "payment_intent.succeeded":
                     PaymentIntent paymentIntent = (PaymentIntent) stripeObject;
                     // Then define and call a method to handle the successful payment intent.
                     // handlePaymentIntentSucceeded(paymentIntent);
                     assert paymentIntent != null;
-                    System.out.println(paymentIntent.toString());
-                    assert paymentIntent != null;
-                    System.out.println(paymentIntent.getAmount());
-                    System.out.println(paymentIntent.getId());
+                    String orderId = paymentIntent.getMetadata().get("orderId");
+                    System.out.println("Order ID: "+orderId);
+                    OrderStatusDTO orderStatusDTO = new OrderStatusDTO();
+                    orderStatusDTO.setStatus("PAID");
+                    orderClient.updateOrderStatus(Long.parseLong(orderId), orderStatusDTO);
                     break;
                 case "payment_method.attached":
                     PaymentMethod paymentMethod = (PaymentMethod) stripeObject;
