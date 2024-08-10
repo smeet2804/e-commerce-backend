@@ -3,7 +3,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - cd e-commerce-backend
+      - cd CI-CD-Demo
       - mvn clean install
       - echo Logging in to Amazon ECR...
       - aws --version
@@ -35,5 +35,5 @@ phases:
 
 artifacts:
   files:
-    - e-commerce-backend/imagedefinitions.json
-    - e-commerce-backend/target/CI-CD-Demo.jar
+    - CI-CD-Demo/imagedefinitions.json
+    - CI-CD-Demo/target/CI-CD-Demo.jar
