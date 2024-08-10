@@ -30,4 +30,11 @@ docker run -p 8080:8080 public.ecr.aws/u0f0p0q3/ci-cd-demo:latest
 
 
 ---- setting up aws codebuild ----
+Follow this tutorial:
+https://www.youtube.com/watch?v=40X6abe5wv0
+https://github.com/basahota/aws-cicd/
 
+Faced error while aws ecr-public command, i gave AdministratorAccess to defined service role, however not recommended.
+
+To ensure it is working correctly till codebuild change hello world message to -> "Hello World, Codebuild Working" and commit it.
+Now http://localhost:8080/api/hello should give "Hello World, Codebuild Working"

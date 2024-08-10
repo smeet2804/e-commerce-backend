@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 public class HelloService {
 
     public String getHelloMessage() {
-        return "Hello, World!";
+        return "Hello World, Codebuild Working!";
     }
 }
