@@ -5,7 +5,3 @@ hooks:
     - location: scripts/docker-setup.sh
       timeout: 300
       runas: ec2-user
-  AfterInstall:
-    - location: scripts/start-docker.sh
-      timeout: 300
-      runas: ec2-user
