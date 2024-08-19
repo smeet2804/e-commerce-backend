@@ -119,6 +119,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>OrderService</finalName>
     </build>
 
 </project>

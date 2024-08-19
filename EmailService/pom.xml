@@ -86,6 +86,8 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>EmailService</finalName>
+
 	</build>
 
 </project>

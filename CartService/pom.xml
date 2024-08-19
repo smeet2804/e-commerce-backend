@@ -103,6 +103,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>CartService</finalName>
     </build>
 
 </project>
