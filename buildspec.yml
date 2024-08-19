@@ -9,24 +9,26 @@ phases:
       - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin $REPOSITORY_URI
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
-      # Initialize SERVICES array
-      - SERVICES=("CI-CD-Demo" "CartService" "EmailService" "OrderService" "PaymentService" "ProductCatalogService" "ServiceDiscovery" "UserService")
-      - echo "Services to build: ${SERVICES[@]}"
-      - for SERVICE in ${SERVICES[@]}; do
-          cd $SERVICE;
+      - |
+        # Initialize SERVICES array
+        SERVICES=("CI-CD-Demo" "CartService" "EmailService" "OrderService" "PaymentService" "ProductCatalogService" "ServiceDiscovery" "UserService")
+        echo "Services to build: ${SERVICES[@]}"
+        for SERVICE in ${SERVICES[@]}; do
+          cd $SERVICE
           mvn clean install || { echo "Maven build failed for $SERVICE"; exit 1; }
-          cd ..;
+          cd ..
         done
 
   build:
     commands:
       - echo Build started on `date`
-      # Reinitialize SERVICES array
-      - SERVICES=("CI-CD-Demo" "CartService" "EmailService" "OrderService" "PaymentService" "ProductCatalogService" "ServiceDiscovery" "UserService")
-      - echo "Services to build Docker images for: ${SERVICES[@]}"
-      # Build Docker images for all services
-      - for SERVICE in ${SERVICES[@]}; do
-          echo Building Docker image for $SERVICE;
+      - |
+        # Reinitialize SERVICES array
+        SERVICES=("CI-CD-Demo" "CartService" "EmailService" "OrderService" "PaymentService" "ProductCatalogService" "ServiceDiscovery" "UserService")
+        echo "Services to build Docker images for: ${SERVICES[@]}"
+        # Build Docker images for all services
+        for SERVICE in ${SERVICES[@]}; do
+          echo Building Docker image for $SERVICE
           docker build -t $REPOSITORY_URI:$SERVICE-latest ./$SERVICE || { echo "Docker build failed for $SERVICE"; exit 1; }
           docker tag $REPOSITORY_URI:$SERVICE-latest $REPOSITORY_URI:$SERVICE-$IMAGE_TAG || { echo "Docker tag failed for $SERVICE"; exit 1; }
         done
@@ -34,17 +36,18 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      # Reinitialize SERVICES array
-      - SERVICES=("CI-CD-Demo" "CartService" "EmailService" "OrderService" "PaymentService" "ProductCatalogService" "ServiceDiscovery" "UserService")
-      - echo "Services to push Docker images for: ${SERVICES[@]}"
-      # Push Docker images for all services
-      - for SERVICE in ${SERVICES[@]}; do
-          echo Pushing Docker images for $SERVICE;
+      - |
+        # Reinitialize SERVICES array
+        SERVICES=("CI-CD-Demo" "CartService" "EmailService" "OrderService" "PaymentService" "ProductCatalogService" "ServiceDiscovery" "UserService")
+        echo "Services to push Docker images for: ${SERVICES[@]}"
+        # Push Docker images for all services
+        for SERVICE in ${SERVICES[@]}; do
+          echo Pushing Docker images for $SERVICE
           docker push $REPOSITORY_URI:$SERVICE-latest || { echo "Docker push failed for $SERVICE-latest"; exit 1; }
           docker push $REPOSITORY_URI:$SERVICE-$IMAGE_TAG || { echo "Docker push failed for $SERVICE-$IMAGE_TAG"; exit 1; }
-          echo '[{"name":"'$SERVICE'","imageUri":"'$REPOSITORY_URI:$SERVICE-$IMAGE_TAG'"}]' > ./$SERVICE/imagedefinitions.json;
-          echo printing imagedefinitions.json for $SERVICE;
-          cat ./$SERVICE/imagedefinitions.json;
+          echo '[{"name":"'$SERVICE'","imageUri":"'$REPOSITORY_URI:$SERVICE-$IMAGE_TAG'"}]' > ./$SERVICE/imagedefinitions.json
+          echo printing imagedefinitions.json for $SERVICE
+          cat ./$SERVICE/imagedefinitions.json
         done
 
 artifacts:
